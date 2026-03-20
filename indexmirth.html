@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mirth Connect Mastery — by Pamas</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700;800&family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#1a1d23;--bg2:#1e2128;--panel:#22262e;--panel2:#272b34;--panel3:#2c3040;
+  --border:#333844;--border2:#3d4455;
+  --teal:#2dd4bf;--teal2:#5eead4;--teal3:#99f6e4;
+  --cyan:#22d3ee;--cyan2:#67e8f9;
+  --blue:#60a5fa;--blue2:#93c5fd;
+  --green:#4ade80;--green2:#86efac;
+  --amber:#fbbf24;--amber2:#fcd34d;
+  --red:#f87171;--red2:#fca5a5;
+  --purple:#a78bfa;--purple2:#c4b5fd;
+  --text:#e2e8f0;--text2:#94a3b8;--muted:#3d4455;--muted2:#64748b;
+  --glow-t:0 0 16px rgba(45,212,191,.18);
+  --glow-c:0 0 16px rgba(34,211,238,.15);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;overflow-x:hidden;}
+canvas#flow{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;opacity:.04;pointer-events:none;}
+.wrap{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:20px 24px;}
+
+/* HEADER */
+header{border-bottom:1px solid var(--border);margin-bottom:22px;animation:slideDown .5s ease both;}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;padding:16px 0 12px;flex-wrap:wrap;gap:12px;}
+.logo{display:flex;align-items:center;gap:14px;}
+.logo-icon{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,#0f766e,#0891b2);
+  display:flex;align-items:center;justify-content:center;font-size:1.7rem;box-shadow:var(--glow-t);}
+.logo-text h1{font-family:'Bebas Neue';font-size:2.1rem;letter-spacing:3px;
+  background:linear-gradient(90deg,var(--teal),var(--cyan2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.logo-text span{font-size:.61rem;color:var(--muted2);letter-spacing:3px;text-transform:uppercase;font-family:'JetBrains Mono';}
+.v-pill{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);border-radius:5px;
+  padding:2px 7px;font-family:'JetBrains Mono';font-size:.6rem;color:var(--teal2);margin-left:8px;}
+.hdr-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hstat{text-align:center;padding:7px 14px;border:1px solid var(--border);border-radius:9px;background:var(--panel);}
+.hstat .num{font-family:'JetBrains Mono';font-size:1.15rem;font-weight:800;color:var(--teal2);}
+.hstat .lbl{font-size:.58rem;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;}
+.author-badge{display:flex;align-items:center;gap:9px;padding:7px 14px 7px 9px;
+  background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.2);
+  border-radius:999px;user-select:none;pointer-events:none;position:relative;overflow:hidden;}
+.author-badge::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(45,212,191,.06),transparent);
+  animation:shim 3s infinite;}
+@keyframes shim{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
+.ab-av{width:27px;height:27px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--cyan));
+  display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;z-index:1;position:relative;}
+.ab-name{font-family:'JetBrains Mono';font-size:.75rem;font-weight:700;color:var(--teal2);display:block;}
+.ab-role{font-size:.55rem;color:var(--muted2);letter-spacing:1.5px;text-transform:uppercase;}
+
+/* SEARCH */
+.search-wrap{position:relative;margin-bottom:18px;animation:slideDown .5s .1s ease both;}
+.search-wrap input{width:100%;padding:12px 18px 12px 46px;background:var(--panel);border:1px solid var(--border);
+  border-radius:11px;color:var(--text);font-family:'JetBrains Mono';font-size:.83rem;outline:none;transition:all .3s;}
+.search-wrap input:focus{border-color:var(--teal);box-shadow:var(--glow-t);}
+.search-wrap input::placeholder{color:var(--muted);}
+.search-wrap .si{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.9rem;}
+
+/* TABS */
+.tabs{display:flex;gap:7px;margin-bottom:20px;flex-wrap:wrap;animation:slideDown .5s .12s ease both;}
+.tab{padding:7px 16px;border-radius:999px;cursor:pointer;border:1px solid var(--border);background:var(--panel);
+  font-size:.77rem;font-weight:600;transition:all .2s;}
+.tab:hover{border-color:var(--teal);color:var(--teal2);}
+.tab.active{background:#134e4a;border-color:var(--teal);color:var(--teal3);}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:258px 1fr;gap:18px;animation:fadeIn .5s .2s ease both;}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:12px;}
+.s-box{background:var(--panel);border:1px solid var(--border);border-radius:13px;overflow:hidden;}
+.s-box h3{padding:11px 14px;font-size:.59rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted2);
+  border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono';}
+.s-box h3 .hl{color:var(--teal2);}
+.cat-list{padding:6px;}
+.cat-item{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:7px;
+  cursor:pointer;transition:all .2s;margin-bottom:2px;font-size:.79rem;}
+.cat-item:hover{background:var(--panel2);}
+.cat-item.active{background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.18);}
+.cat-item .cl{display:flex;align-items:center;gap:8px;}
+.cat-icon{width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.78rem;}
+.cbadge{font-family:'JetBrains Mono';font-size:.62rem;padding:2px 7px;border-radius:999px;
+  background:rgba(45,212,191,.08);color:var(--teal2);}
+.prog-wrap{padding:12px;}
+.pi{margin-bottom:11px;}
+.ph{display:flex;justify-content:space-between;font-size:.69rem;margin-bottom:4px;}
+.ph .pn{color:var(--text2);}
+.ph .pp{color:var(--teal2);font-family:'JetBrains Mono';}
+.pbar{height:3px;background:var(--border);border-radius:999px;overflow:hidden;}
+.pfill{height:100%;border-radius:999px;transition:width 1.2s ease;}
+.tip-box{padding:12px;}
+.tip-item{font-size:.73rem;color:var(--text2);line-height:1.6;padding:8px 10px;border-radius:7px;
+  background:rgba(45,212,191,.04);border-left:2px solid var(--teal);margin-bottom:7px;}
+.tip-lbl{font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--teal2);margin-bottom:3px;font-weight:700;display:block;}
+
+/* CONTENT */
+.content{display:flex;flex-direction:column;gap:16px;}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+.sec-head h2{font-family:'Bebas Neue';font-size:1.5rem;letter-spacing:1.5px;display:flex;align-items:center;gap:9px;}
+.sec-head h2 .hl{background:linear-gradient(90deg,var(--teal),var(--cyan2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.cnt-badge{font-size:.63rem;padding:3px 10px;border-radius:999px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);color:var(--teal2);font-family:'JetBrains Mono';}
+
+/* CARDS */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(288px,1fr));gap:12px;}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:13px;overflow:hidden;
+  cursor:pointer;transition:all .25s;position:relative;}
+.card:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:0 8px 26px rgba(45,212,191,.1);}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--cyan));opacity:0;transition:opacity .25s;}
+.card:hover::before{opacity:1;}
+.card-head{padding:11px 13px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.card-title{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.83rem;}
+.c-icon{width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.8rem;}
+.lvl-badge{font-size:.57rem;padding:2px 8px;border-radius:999px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;}
+.lv-beginner{background:rgba(74,222,128,.13);color:var(--green2);}
+.lv-intermediate{background:rgba(45,212,191,.13);color:var(--teal2);}
+.lv-advanced{background:rgba(251,191,36,.13);color:var(--amber2);}
+.lv-expert{background:rgba(248,113,113,.13);color:var(--red2);}
+.card-body{padding:11px 13px;}
+.card-body p{font-size:.77rem;color:var(--text2);margin-bottom:8px;line-height:1.6;}
+.concept-pill{background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.18);
+  border-radius:6px;padding:5px 10px;font-family:'JetBrains Mono';font-size:.67rem;color:var(--cyan2);margin-bottom:8px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ctags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;}
+.ctag{font-size:.59rem;padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.04);color:var(--muted2);border:1px solid var(--border);}
+.learned-mark{position:absolute;top:9px;right:9px;width:18px;height:18px;border-radius:50%;
+  background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:.55rem;color:#fff;z-index:2;}
+
+/* MODAL */
+.modal-ov{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px;}
+.modal-ov.open{display:flex;}
+.modal{background:var(--panel);border:1px solid var(--border2);border-radius:17px;width:100%;max-width:780px;max-height:90vh;overflow-y:auto;animation:scaleIn .28s ease;}
+.modal-top{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;position:sticky;top:0;background:var(--panel);z-index:1;}
+.modal-top h2{font-size:1.03rem;font-weight:700;display:flex;align-items:center;gap:9px;flex:1;line-height:1.4;}
+.m-close{width:30px;height:30px;border-radius:7px;background:var(--panel2);border:1px solid var(--border);color:var(--text);cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;}
+.m-close:hover{background:var(--red);border-color:var(--red);}
+.modal-body{padding:20px 22px;}
+.modal-body .big-desc{color:var(--text);font-size:.87rem;line-height:1.8;margin-bottom:14px;}
+.modal-body h4{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;margin:15px 0 8px;font-family:'JetBrains Mono';}
+.m-t{color:var(--teal2);}
+.m-c{color:var(--cyan2);}
+.m-a{color:var(--amber2);}
+.m-g{color:var(--green2);}
+/* CODE BLOCKS IN MODAL */
+.code-block{background:#13161c;border:1px solid var(--border2);border-radius:10px;padding:14px 16px;margin-bottom:12px;overflow-x:auto;}
+.code-block .cb-lbl{font-family:'JetBrains Mono';font-size:.59rem;color:var(--muted2);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;display:block;}
+.code-block pre{font-family:'JetBrains Mono';font-size:.75rem;line-height:1.9;color:#cbd5e1;white-space:pre;}
+.code-block pre .kw{color:#93c5fd;}
+.code-block pre .str{color:#86efac;}
+.code-block pre .cm{color:#475569;}
+.code-block pre .num{color:var(--amber2);}
+.code-block pre .fn{color:#f0abfc;}
+.code-block pre .hl7{color:var(--teal2);}
+.code-block pre .prop{color:var(--cyan2);}
+/* HL7 display */
+.hl7-block{background:#13161c;border:1px solid var(--border2);border-left:3px solid var(--teal);border-radius:10px;padding:14px 16px;margin-bottom:12px;overflow-x:auto;}
+.hl7-block pre{font-family:'JetBrains Mono';font-size:.74rem;line-height:1.9;color:#cbd5e1;}
+.hl7-seg{color:var(--teal2);font-weight:700;}
+.hl7-sep{color:var(--muted2);}
+.hl7-val{color:#e2e8f0;}
+.note-block{border-radius:9px;padding:11px 14px;margin-bottom:10px;font-size:.78rem;line-height:1.6;display:flex;gap:9px;}
+.nb-t{background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.18);color:var(--teal2);}
+.nb-c{background:rgba(34,211,238,.06);border:1px solid rgba(34,211,238,.18);color:var(--cyan2);}
+.nb-a{background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.18);color:var(--amber2);}
+.nb-r{background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.18);color:var(--red2);}
+.nb-g{background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.18);color:var(--green2);}
+.m-actions{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap;}
+.m-btn{padding:8px 17px;border-radius:8px;cursor:pointer;font-size:.77rem;font-weight:700;border:1px solid;transition:all .2s;}
+.m-btn-t{background:rgba(45,212,191,.08);border-color:var(--teal);color:var(--teal2);}
+.m-btn-t:hover{background:rgba(45,212,191,.18);}
+.m-btn-c{background:rgba(34,211,238,.08);border-color:var(--cyan);color:var(--cyan2);}
+.m-btn-c:hover{background:rgba(34,211,238,.18);}
+
+/* ROADMAP */
+.rm-item{display:flex;gap:13px;position:relative;}
+.rm-item:not(:last-child) .rm-line{position:absolute;left:16px;top:36px;width:2px;bottom:-8px;background:var(--border);}
+.rm-num{width:34px;height:34px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono';font-size:.74rem;font-weight:700;position:relative;z-index:1;border:2px solid var(--border);background:var(--panel2);}
+.rm-num.done{background:rgba(45,212,191,.12);border-color:var(--teal);color:var(--teal2);}
+.rm-num.active{background:rgba(34,211,238,.12);border-color:var(--cyan);color:var(--cyan2);}
+.rm-num.locked{color:var(--muted);}
+.rm-content{padding:4px 0 20px;flex:1;}
+.rm-content h4{font-size:.85rem;font-weight:700;margin-bottom:3px;}
+.rm-content p{font-size:.73rem;color:var(--text2);line-height:1.5;}
+.rm-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px;}
+.rm-tag{font-size:.59rem;padding:2px 7px;border-radius:4px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--muted2);}
+
+/* CHEATSHEET */
+.cs-wrap{background:var(--panel);border:1px solid var(--border);border-radius:13px;overflow:hidden;}
+.cs-table{width:100%;border-collapse:collapse;}
+.cs-table th{text-align:left;padding:9px 13px;font-size:.59rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);border-bottom:2px solid var(--border);font-family:'JetBrains Mono';}
+.cs-table td{padding:8px 13px;font-size:.77rem;border-bottom:1px solid rgba(51,56,68,.5);}
+.cs-table tr:hover td{background:rgba(45,212,191,.025);}
+.cs-table .term{font-family:'JetBrains Mono';color:var(--teal2);font-weight:600;font-size:.72rem;}
+.cs-table .concept{font-family:'JetBrains Mono';color:var(--cyan2);font-size:.69rem;}
+
+/* FLASHCARDS */
+.fc-deck-sel{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px;}
+.fc-deck-btn{padding:6px 13px;border-radius:999px;cursor:pointer;border:1px solid var(--border);background:var(--panel);font-size:.74rem;font-weight:600;transition:all .2s;}
+.fc-deck-btn.active{background:#134e4a;border-color:var(--teal);color:var(--teal3);}
+.fc-deck-btn:hover{border-color:var(--teal);color:var(--teal2);}
+.fc-progress-bar{height:3px;background:var(--border);border-radius:999px;overflow:hidden;margin-bottom:16px;max-width:700px;margin-left:auto;margin-right:auto;}
+.fc-progress-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--teal),var(--cyan));transition:width .4s ease;}
+.fc-counter{font-size:.77rem;color:var(--muted2);margin-bottom:12px;font-family:'JetBrains Mono';text-align:center;}
+.fc-wrap{perspective:1200px;}
+.flashcard{width:100%;max-width:700px;margin:0 auto;height:295px;position:relative;cursor:pointer;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.4,.2,.2,1);}
+.flashcard.flipped{transform:rotateY(180deg);}
+.fc-face{position:absolute;inset:0;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.fc-front{background:var(--panel2);border:2px solid var(--teal);box-shadow:0 6px 30px rgba(45,212,191,.12);}
+.fc-back{background:#0f1a1a;border:2px solid var(--cyan);box-shadow:0 6px 30px rgba(34,211,238,.12);transform:rotateY(180deg);}
+.fc-lbl-f{font-size:.6rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--teal2);margin-bottom:13px;font-family:'JetBrains Mono';}
+.fc-lbl-b{font-size:.6rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan2);margin-bottom:13px;font-family:'JetBrains Mono';}
+.fc-q{font-size:.95rem;font-weight:700;color:var(--text);line-height:1.5;max-width:580px;}
+.fc-a{font-size:.82rem;color:var(--text2);line-height:1.7;max-width:580px;}
+.fc-a strong{color:var(--teal2);}
+.fc-a .mono{color:var(--cyan2);font-family:'JetBrains Mono';font-size:.78rem;}
+.fc-hint{font-size:.67rem;color:var(--muted2);margin-top:12px;}
+.fc-controls{display:flex;align-items:center;justify-content:center;gap:11px;margin-top:20px;flex-wrap:wrap;}
+.fc-btn{padding:8px 20px;border-radius:8px;cursor:pointer;font-size:.79rem;font-weight:700;border:1px solid;transition:all .2s;}
+.fc-btn-prev{background:transparent;border-color:var(--border2);color:var(--text2);}
+.fc-btn-flip{background:#134e4a;border-color:var(--teal);color:var(--teal3);}
+.fc-btn-next{background:#164e63;border-color:var(--cyan);color:var(--cyan2);}
+.fc-btn-shuffle{background:transparent;border-color:rgba(167,139,250,.4);color:var(--purple2);}
+
+/* QUIZ */
+.quiz-wrap{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:18px;}
+.quiz-meta{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.quiz-type-badge{font-size:.61rem;padding:2px 10px;border-radius:999px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.qt-single{background:rgba(45,212,191,.12);color:var(--teal2);}
+.qt-code{background:rgba(34,211,238,.12);color:var(--cyan2);}
+.q-num{font-family:'JetBrains Mono';font-size:.71rem;color:var(--muted2);}
+.q-text{font-size:.91rem;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.55;}
+.q-code{background:#13161c;border:1px solid var(--border2);border-radius:8px;padding:11px 14px;
+  font-family:'JetBrains Mono';font-size:.73rem;color:#cbd5e1;margin-bottom:14px;line-height:1.9;overflow-x:auto;white-space:pre;}
+.q-opts{display:flex;flex-direction:column;gap:7px;}
+.q-opt{padding:10px 13px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);cursor:pointer;font-size:.79rem;transition:all .2s;display:flex;align-items:flex-start;gap:9px;line-height:1.5;}
+.q-opt:hover{border-color:var(--teal);background:rgba(45,212,191,.04);}
+.q-opt.correct{border-color:var(--green);background:rgba(74,222,128,.08);color:var(--green2);}
+.q-opt.wrong{border-color:var(--red);background:rgba(248,113,113,.08);color:var(--red2);}
+.q-letter{min-width:22px;height:22px;border-radius:5px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono';font-size:.67rem;font-weight:700;flex-shrink:0;margin-top:1px;}
+.q-foot{display:flex;justify-content:space-between;align-items:flex-start;margin-top:14px;flex-wrap:wrap;gap:8px;}
+.q-rationale{font-size:.77rem;color:var(--text2);max-width:65%;line-height:1.55;background:var(--panel2);border-radius:8px;padding:9px 12px;border-left:3px solid var(--teal);display:none;}
+.q-rationale.show{display:block;}
+.q-next{padding:8px 18px;background:#134e4a;color:var(--teal3);border:1px solid var(--teal);border-radius:7px;font-weight:700;cursor:pointer;font-size:.78rem;transition:all .2s;display:none;}
+.q-score-bar{height:4px;background:var(--border);border-radius:999px;overflow:hidden;margin-bottom:16px;}
+.q-score-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--teal),var(--cyan));transition:width .6s ease;}
+.q-stats{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+.q-stat{font-family:'JetBrains Mono';font-size:.71rem;padding:4px 11px;border-radius:7px;border:1px solid var(--border);}
+.qs-correct{border-color:var(--green);color:var(--green2);background:rgba(74,222,128,.06);}
+.qs-wrong{border-color:var(--red);color:var(--red2);background:rgba(248,113,113,.06);}
+.qs-total{border-color:var(--teal);color:var(--teal2);background:rgba(45,212,191,.06);}
+
+/* REFERENCE */
+.ref-section{background:var(--panel);border:1px solid var(--border);border-radius:13px;overflow:hidden;margin-bottom:14px;}
+.ref-sec-head{padding:11px 16px;background:rgba(45,212,191,.05);border-bottom:1px solid var(--border);
+  font-family:'JetBrains Mono';font-size:.77rem;font-weight:700;color:var(--teal2);display:flex;align-items:center;gap:8px;}
+.ref-table{width:100%;border-collapse:collapse;}
+.ref-table th{text-align:left;padding:8px 14px;font-size:.59rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);border-bottom:1px solid var(--border);font-family:'JetBrains Mono';}
+.ref-table td{padding:8px 14px;font-size:.77rem;border-bottom:1px solid rgba(51,56,68,.4);vertical-align:top;}
+.ref-table tr:last-child td{border-bottom:none;}
+.ref-table tr:hover td{background:rgba(45,212,191,.02);}
+.ref-table .cmd{font-family:'JetBrains Mono';color:var(--cyan2);font-size:.72rem;font-weight:600;}
+.ref-table .type{font-family:'JetBrains Mono';color:var(--teal2);font-size:.69rem;}
+.ref-table .desc{color:var(--text2);font-size:.75rem;}
+
+/* FOOTER */
+.site-footer{margin-top:40px;padding:18px 0 12px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.foot-author{display:flex;align-items:center;gap:11px;padding:8px 16px;border-radius:11px;
+  background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.18);user-select:none;pointer-events:none;}
+.fa-av{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--teal),var(--cyan));
+  display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:900;color:#fff;box-shadow:var(--glow-t);}
+.fa-name{font-family:'JetBrains Mono';font-weight:700;font-size:.85rem;color:var(--teal2);display:block;}
+.fa-sub{font-size:.59rem;color:var(--muted2);letter-spacing:2px;text-transform:uppercase;}
+.foot-copy{font-size:.65rem;color:var(--muted2);font-family:'JetBrains Mono';}
+.foot-copy span{color:var(--teal2);}
+
+/* NOTIF */
+.notif{position:fixed;bottom:22px;right:22px;z-index:999;background:var(--panel);border:1px solid var(--green);border-radius:9px;padding:9px 15px;font-size:.76rem;color:var(--green2);display:flex;align-items:center;gap:7px;transform:translateY(60px);opacity:0;transition:all .3s;pointer-events:none;}
+.notif.show{transform:translateY(0);opacity:1;}
+
+@keyframes slideDown{from{opacity:0;transform:translateY(-12px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.95);}to{opacity:1;transform:scale(1);}}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--teal);}
+@media(max-width:900px){.layout{grid-template-columns:1fr;}.sidebar{display:none;}}
+</style>
+</head>
+<body>
+<canvas id="flow"></canvas>
+<div class="wrap">
+
+<header>
+  <div class="hdr-top">
+    <div class="logo">
+      <div class="logo-icon">🏥</div>
+      <div class="logo-text">
+        <h1>Mirth Connect Mastery<span class="v-pill">v4.x</span></h1>
+        <span>Healthcare Integration Engine · HL7 · FHIR · by Pamas</span>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <div class="hstat"><div class="num" id="total-topics">0</div><div class="lbl">Topics</div></div>
+      <div class="hstat"><div class="num">200+</div><div class="lbl">Quizzes</div></div>
+      <div class="hstat"><div class="num" id="learned-count">0</div><div class="lbl">Mastered</div></div>
+      <div class="author-badge" id="author-badge" data-author="Pamas">
+        <div class="ab-av">P</div>
+        <div><span class="ab-name" id="author-name">Pamas</span><span class="ab-role">Author 🔒</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="search-wrap">
+  <span class="si">🔍</span>
+  <input type="text" id="search" placeholder="Search topics, connectors, HL7 segments... (e.g. transformer, MSH, channel, FHIR)" oninput="filterContent()"/>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="setView('topics',this)">📚 Topics</div>
+  <div class="tab" onclick="setView('roadmap',this)">🗺 Roadmap</div>
+  <div class="tab" onclick="setView('cheatsheet',this)">📋 Cheatsheet</div>
+  <div class="tab" onclick="setView('flashcards',this)">🃏 Flashcards</div>
+  <div class="tab" onclick="setView('quiz',this)">🧠 Quiz</div>
+  <div class="tab" onclick="setView('reference',this)">📖 Reference</div>
+</div>
+
+<div class="layout">
+  <div class="sidebar">
+    <div class="s-box">
+      <h3><span class="hl">📂</span> Categories</h3>
+      <div class="cat-list" id="cat-list"></div>
+    </div>
+    <div class="s-box">
+      <h3><span class="hl">📈</span> Progress</h3>
+      <div class="prog-wrap" id="prog-wrap"></div>
+    </div>
+    <div class="s-box">
+      <h3><span class="hl">💡</span> Quick Tips</h3>
+      <div class="tip-box">
+        <div class="tip-item"><span class="tip-lbl">Source vs Destination</span>Source connector receives messages; Destination connectors send them. One source, many destinations per channel.</div>
+        <div class="tip-item"><span class="tip-lbl">Global Map</span>Use globalMap.put() to share data across channels — survives channel redeployment.</div>
+        <div class="tip-item"><span class="tip-lbl">HL7 Parsing</span>msg['PID']['PID.3']['PID.3.1'].toString() — always use toString() to get string value.</div>
+        <div class="tip-item"><span class="tip-lbl">Error Handling</span>Always set Response Transformer to handle errors; use alerts for critical failures.</div>
+      </div>
+    </div>
+  </div>
+  <div class="content" id="content"></div>
+</div>
+
+<footer class="site-footer">
+  <div class="foot-author" id="footer-author" data-author="Pamas">
+    <div class="fa-av">P</div>
+    <div><span class="fa-name" id="footer-author-name">Pamas</span><span class="fa-sub">Pamas · Mirth Connect Mastery</span></div>
+    <span style="font-size:.8rem;margin-left:6px;">🔒</span>
+  </div>
+  <div class="foot-copy">© <span id="foot-year"></span> Mirth Connect Mastery · Built by <span>Pamas</span> · Vanilla HTML/CSS/JS</div>
+</footer>
+</div>
+
+<div class="modal-ov" id="modal" onclick="closeModalOv(event)">
+  <div class="modal">
+    <div class="modal-top"><h2 id="modal-title"></h2><button class="m-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+<div class="notif" id="notif">✓ Copied!</div>
+
+<script>
+// ── CANVAS: Data flow animation ──────────────────────────
+(function(){
+  const c=document.getElementById('flow'),ctx=c.getContext('2d');
+  let w,h,nodes=[];
+  function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight;
+    nodes=[];for(let i=0;i<60;i++)nodes.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*2+1});}
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    nodes.forEach(n=>{n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>w)n.vx*=-1;if(n.y<0||n.y>h)n.vy*=-1;
+      ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fillStyle='rgba(45,212,191,0.6)';ctx.fill();});
+    nodes.forEach((a,i)=>nodes.slice(i+1).forEach(b=>{const d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(d<120){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle=`rgba(34,211,238,${.4*(1-d/120)})`;ctx.lineWidth=.5;ctx.stroke();}}));
+    requestAnimationFrame(draw);}
+  window.addEventListener('resize',resize);resize();draw();
+})();
+
+// ── DATABASE ─────────────────────────────────────────────
+const DB={
+  categories:[
+    {id:'basics',name:'Mirth Basics',icon:'🏥',color:'#2dd4bf'},
+    {id:'channel',name:'Channel Architecture',icon:'🔄',color:'#22d3ee'},
+    {id:'connectors',name:'Connectors & Transports',icon:'🔌',color:'#60a5fa'},
+    {id:'transform',name:'Message Transformation',icon:'⚙️',color:'#a78bfa'},
+    {id:'hl7',name:'HL7 & FHIR',icon:'📋',color:'#4ade80'},
+    {id:'routing',name:'Filters & Routing',icon:'🔀',color:'#fbbf24'},
+    {id:'errors',name:'Error Handling & Alerts',icon:'🚨',color:'#f87171'},
+    {id:'admin',name:'Administration',icon:'🛠️',color:'#34d399'},
+  ],
+  topics:[
+    // BASICS
+    {id:'what-is-mirth',cat:'basics',level:'beginner',name:'What is Mirth Connect?',
+     concept:'Open-source healthcare integration engine (ESB)',
+     desc:'Mirth Connect is an open-source healthcare integration engine built on Java. It allows healthcare organizations to exchange clinical data between different systems using standard protocols like HL7 v2, HL7 v3, FHIR, and more.',
+     tags:['Mirth Connect','ESB','integration','healthcare','open-source'],
+     detail:{
+       full:'Mirth Connect (now NextGen Connect) is a cross-platform HL7 interface engine. It acts as a middleware layer that receives messages from source systems, transforms them, and delivers them to destination systems. It supports dozens of protocols and message formats.',
+       examples:[
+         {label:'Typical use case',type:'text',code:`Source System (EHR) ──► Mirth Channel ──► Destination (Lab, Pharmacy, HIE)
+
+Flow:
+1. EHR sends HL7 ADT message to Mirth via TCP/MLLP
+2. Source Transformer parses and validates the message
+3. Filter decides whether to process or discard
+4. Destination Transformer maps to target format
+5. Destination Connector delivers to target system
+6. Response is returned to source`},
+         {label:'Key capabilities',type:'text',code:`✓ Protocol support: HL7 v2, FHIR R4, DICOM, X12, XML, JSON, CSV
+✓ Connectors: TCP/MLLP, HTTP, HTTPS, SFTP, Database, JMS, File
+✓ JavaScript-based message transformation
+✓ Channel grouping and deployment management
+✓ Built-in dashboard with message monitoring
+✓ Code templates and shared resources
+✓ REST API for programmatic management`},
+       ],
+       notes:[
+         {type:'nb-t',icon:'💡',text:'Mirth Connect is free and open-source. NextGen Connect is the commercial version with enterprise support.'},
+         {type:'nb-c',icon:'📋',text:'The Mirth web admin UI runs on port 8080 (HTTP) and 8443 (HTTPS) by default. The MLLP listener port is configurable per channel.'},
+       ],
+       tip:'Mirth Connect uses a channel-based architecture. Each channel has exactly ONE source connector and one or more destination connectors. Think of a channel as a single integration path.'
+     }
+    },
+    {id:'channel-lifecycle',cat:'channel',level:'beginner',name:'Channel Lifecycle',
+     concept:'Deploy → Start → Running → Stop → Undeploy',
+     desc:'Channels go through distinct states: Undeployed, Deployed (stopped), Started (running), Paused. Understanding the lifecycle is essential for maintenance and troubleshooting.',
+     tags:['channel','lifecycle','deploy','start','stop','undeploy'],
+     detail:{
+       full:'A Mirth channel must be deployed before it can process messages. Deployment compiles the channel code. Starting it begins listening for messages. You can pause without stopping, or stop without undeploying.',
+       examples:[
+         {label:'Channel states',type:'text',code:`UNDEPLOYED  → No resources allocated, not listening
+DEPLOYED    → Compiled and ready, but NOT yet listening
+STARTED     → Actively listening and processing messages
+PAUSED      → Temporarily stopped, queue preserved
+STOPPED     → Not processing, but still deployed
+
+Transitions:
+Deploy   → UNDEPLOYED to DEPLOYED
+Start    → DEPLOYED/STOPPED to STARTED
+Pause    → STARTED to PAUSED
+Stop     → STARTED/PAUSED to STOPPED
+Undeploy → DEPLOYED/STOPPED to UNDEPLOYED`},
+         {label:'Via Mirth REST API',type:'js',code:`// Deploy a channel
+PUT /api/channels/{channelId}/deployed
+
+// Start a channel
+POST /api/channels/{channelId}/_start
+
+// Stop a channel
+POST /api/channels/{channelId}/_stop
+
+// Undeploy a channel
+DELETE /api/channels/{channelId}/deployed`},
+       ],
+       notes:[
+         {type:'nb-a',icon:'⚠️',text:'Undeploying a channel clears its message queue. Always stop instead of undeploy if you need to preserve unprocessed messages.'},
+         {type:'nb-t',icon:'💡',text:'You can redeploy a channel without undeploying — this recompiles the channel code and applies changes without losing the queue.'},
+       ],
+       tip:'Use Channel Groups to deploy/undeploy multiple related channels together. This is essential for maintaining dependencies between channels in production.'
+     }
+    },
+    {id:'message-flow',cat:'channel',level:'beginner',name:'Message Flow & Processing',
+     concept:'Source → Preprocessor → Source Transformer → Filter → Destination Transformer → Connector',
+     desc:'Every message in Mirth follows a strict processing pipeline. Understanding this flow is fundamental to building correct channels.',
+     tags:['message flow','preprocessor','transformer','filter','destination','pipeline'],
+     detail:{
+       full:'Mirth processes messages through a defined pipeline. Each stage can modify, filter, or route the message. The raw message (connectorMessage.getRawData()) is always preserved.',
+       examples:[
+         {label:'Full message pipeline',type:'text',code:`INCOMING MESSAGE
+      │
+      ▼
+[Preprocessor Script]     ← Runs before any processing (raw string manipulation)
+      │
+      ▼
+[Source Transformer]      ← Parse, validate, enrich, set channel map vars
+      │
+      ▼
+[Filter]                  ← Accept (true) or discard (false) the message
+      │
+      ▼
+[Destination Transformer] ← Map to target format for each destination
+      │
+      ▼
+[Destination Connector]   ← Send via TCP, HTTP, DB, File, etc.
+      │
+      ▼
+[Response Transformer]    ← Process ACK/response from destination
+      │
+      ▼
+[Postprocessor Script]    ← Runs after all destinations complete`},
+         {label:'Accessing message data in transformer',type:'js',code:`// Raw incoming message string
+var rawMsg = connectorMessage.getRawData();
+
+// Parsed HL7 message object (auto-parsed for HL7 channels)
+var msg = new XML(connectorMessage.getEncodedData());
+
+// Message variables available in all scripts:
+// channelId    - current channel UUID
+// channelName  - current channel name  
+// message      - the ImmutableMessage object
+// connectorMessage - ConnectorMessage object
+// sourceMap    - map populated by source connector
+// channelMap   - shared within one message across all destinations
+// globalMap    - shared across ALL channels`},
+       ],
+       notes:[
+         {type:'nb-t',icon:'💡',text:'channelMap persists within a single message\'s journey. globalMap persists across all messages and channels. globalChannelMap is per-channel but shared across messages.'},
+         {type:'nb-c',icon:'📋',text:'The Preprocessor runs on the raw string BEFORE HL7 parsing. Use it to fix malformed messages (e.g., wrong segment delimiters) before the transformer sees them.'},
+       ],
+       tip:'Always log at key pipeline stages during development: logger.info("Stage reached: " + msg[\'MSH\'][\'MSH.9\'].toString()). Remove or reduce logging in production for performance.'
+     }
+    },
+    // CONNECTORS
+    {id:'tcp-mllp',cat:'connectors',level:'beginner',name:'TCP/MLLP Connector',
+     concept:'MLLP = Minimal Lower Layer Protocol (HL7 over TCP)',
+     desc:'MLLP is the standard transport for HL7 v2 messages. Mirth\'s TCP listener connector wraps HL7 in MLLP framing (0x0B start, 0x1C 0x0D end). Most common connector in healthcare.',
+     tags:['TCP','MLLP','HL7','listener','sender','port'],
+     detail:{
+       full:'MLLP (Minimal Lower Layer Protocol) adds a thin framing layer around HL7 messages for TCP transport. Start block: 0x0B (vertical tab). End block: 0x1C (file separator) + 0x0D (carriage return).',
+       examples:[
+         {label:'Source: TCP Listener settings',type:'text',code:`Connector Type: TCP Listener
+Local Port:    6661  (choose any available port)
+Buffer Size:   65536 (bytes)
+Keep Connection Open: Yes
+Data Type:     HL7 v2.x (auto-parses to XML)
+Max Connections: 10
+
+MLLP Framing (auto-handled by Mirth):
+SB: 0x0B (Vertical Tab - starts message)
+EB: 0x1C (File Separator - ends message)  
+CR: 0x0D (Carriage Return - after EB)`},
+         {label:'Destination: TCP Sender settings',type:'text',code:`Connector Type: TCP Sender
+Remote Address: 192.168.1.100
+Remote Port:    6661
+Keep Connection Open: Yes  (important for performance)
+Response Timeout: 5000 (ms)
+
+// In destination transformer - send HL7:
+// The channel auto-wraps in MLLP framing
+
+// To send custom template:
+tmp = new XML(msg.toString());
+tmp['MSH']['MSH.3']['MSH.3.1'] = 'MIRTH_SENDER';`},
+       ],
+       notes:[
+         {type:'nb-a',icon:'⚠️',text:'Always test TCP connectivity with a tool like netcat (nc -l PORT) before deploying channels. Firewall rules block many HL7 ports.'},
+         {type:'nb-t',icon:'💡',text:'Set "Keep Connection Open = Yes" on TCP Sender for high-volume interfaces — avoids reconnection overhead on every message.'},
+       ],
+       tip:'For load-balanced or redundant destinations, use multiple TCP Sender destinations within the same channel — Mirth sends to all destinations in parallel (or sequentially based on settings).'
+     }
+    },
+    {id:'http-connector',cat:'connectors',level:'intermediate',name:'HTTP/HTTPS Connector',
+     concept:'HTTP Listener (REST/SOAP source) + HTTP Sender (REST/SOAP destination)',
+     desc:'HTTP connectors enable REST API and web service integration. HTTP Listener acts as a web server; HTTP Sender makes outbound HTTP requests. Essential for FHIR interfaces.',
+     tags:['HTTP','HTTPS','REST','FHIR','HTTP Listener','HTTP Sender','headers'],
+     detail:{
+       full:'HTTP Listener creates an embedded web server in Mirth. HTTP Sender makes outbound HTTP/HTTPS calls. Both support custom headers, authentication, SSL/TLS, and all HTTP methods.',
+       examples:[
+         {label:'HTTP Listener (source) config',type:'text',code:`Connector Type: HTTP Listener
+Local Port:    8888
+Base Context Path: /fhir/patient
+Response Content Type: application/fhir+json
+HTTP Method: POST (or ANY to accept all methods)
+
+// Access request data in source transformer:
+var method = sourceMap.get('method');       // GET, POST, PUT
+var requestUrl = sourceMap.get('requestUrl');
+var headers = sourceMap.get('headers');
+var queryParams = sourceMap.get('parameters');
+
+// Set HTTP response status in postprocessor:
+responseMap.put('responseStatusCode', '200');
+responseMap.put('response', 'OK');`},
+         {label:'HTTP Sender (destination) config',type:'js',code:`// Destination type: HTTP Sender
+// URL: https://api.example.com/patients/${'{'}mrn{'}'}
+// Method: POST
+// Content-Type: application/json
+
+// In destination transformer — set custom headers:
+destinationConnectorProperties.setProperty(
+  'headers', 
+  JSON.stringify({
+    'Authorization': 'Bearer ' + globalMap.get('apiToken'),
+    'Content-Type': 'application/fhir+json',
+    'Accept': 'application/fhir+json'
+  })
+);
+
+// Build request body:
+var fhirPatient = {
+  resourceType: 'Patient',
+  id: msg['PID']['PID.3']['PID.3.1'].toString(),
+  name: [{family: msg['PID']['PID.5']['PID.5.1'].toString()}]
+};
+return JSON.stringify(fhirPatient);`},
+       ],
+       notes:[
+         {type:'nb-t',icon:'💡',text:'For HTTPS, configure the keystore/truststore in Mirth\'s server settings. Self-signed certificates need to be imported into the Mirth truststore.'},
+         {type:'nb-c',icon:'📋',text:'HTTP Listener response is set via the Response transformer or postprocessor using responseMap. Default response is the last destination\'s response.'},
+       ],
+       tip:'For FHIR R4 APIs, set Content-Type: application/fhir+json and Accept: application/fhir+json. Use the HTTP Sender with OAuth2 by storing the access token in globalMap and refreshing it periodically via a separate channel.'
+     }
+    },
+    {id:'db-connector',cat:'connectors',level:'intermediate',name:'Database Connector',
+     concept:'Database Reader (polling) + Database Writer (insert/update)',
+     desc:'Database connectors integrate Mirth with SQL databases (MySQL, PostgreSQL, Oracle, MSSQL). Database Reader polls on a schedule; Database Writer executes INSERT/UPDATE/DELETE.',
+     tags:['database','SQL','Database Reader','Database Writer','JDBC','polling'],
+     detail:{
+       full:'Database Reader polls a database table/view on a configurable schedule and creates a message per row. Database Writer executes parameterized SQL statements using message data.',
+       examples:[
+         {label:'Database Reader (source)',type:'js',code:`// Connector: Database Reader
+// Driver: com.mysql.cj.jdbc.Driver
+// URL: jdbc:mysql://localhost:3306/ehr_db
+// Poll Interval: 60000 ms (1 minute)
+
+// Select query - use LIMIT to control batch size:
+SELECT patient_id, first_name, last_name, 
+       dob, mrn, processed
+FROM pending_admissions
+WHERE processed = 0
+ORDER BY created_at ASC
+LIMIT 100;
+
+// After processing, mark as done in postprocessor:
+// (Use Database Writer destination or direct JDBC)`},
+         {label:'Database Writer (destination)',type:'js',code:`// In destination transformer:
+// Map message fields to parameterized query
+
+// SQL Template (use ${'{'}...{'}'} for parameters):
+INSERT INTO hl7_messages (
+  msg_id, patient_mrn, msg_type, received_at, raw_msg
+) VALUES (
+  ${'{'}message.messageId{'}'}, 
+  ${'{'}msg['PID']['PID.3']['PID.3.1'].toString(){'}'}, 
+  ${'{'}msg['MSH']['MSH.9']['MSH.9.1'].toString(){'}'}, 
+  NOW(), 
+  ${'{'}connectorMessage.getRawData(){'}'}
+);
+
+// For JavaScript queries in DB Writer:
+var dbConn = DatabaseConnectionFactory.createDatabaseConnection(
+  'com.mysql.cj.jdbc.Driver',
+  'jdbc:mysql://localhost:3306/ehr',
+  'user', 'pass'
+);
+dbConn.executeCachedQuery('SELECT ...');`},
+       ],
+       notes:[
+         {type:'nb-a',icon:'⚠️',text:'Database Reader does NOT mark records as processed automatically. You must handle this in your postprocessor or use a status flag column.'},
+         {type:'nb-t',icon:'💡',text:'Use DatabaseConnectionFactory for ad-hoc queries in transformers. Use Database Connector for the primary channel connection — it uses Mirth\'s connection pooling.'},
+       ],
+       tip:'Always use parameterized queries (${field}) in Database Writer — never concatenate user data into SQL strings. This prevents SQL injection and handles escaping automatically.'
+     }
+    },
+    {id:'file-sftp',cat:'connectors',level:'beginner',name:'File & SFTP Connector',
+     concept:'File Reader (polling directory) + File Writer + SFTP',
+     desc:'File connectors read from and write to local directories. SFTP connectors securely transfer files to/from remote servers. Essential for batch file processing workflows.',
+     tags:['File Reader','File Writer','SFTP','batch','directory','polling'],
+     detail:{
+       full:'File Reader polls a directory for new files on a schedule. File Writer creates output files. Both support file filtering, archiving processed files, and various encodings. SFTP adds secure remote file transfer.',
+       examples:[
+         {label:'File Reader (source) settings',type:'text',code:`Connector: File Reader
+Directory:   /data/hl7/incoming
+File Filter: *.hl7 (or * for all)
+Regex:       false
+Recursive:   false
+After Processing Action: Move to /data/hl7/archive/${'{'}YYYYMMDD{'}'}
+
+// Access file metadata in transformer:
+var fileName = sourceMap.get('originalFilename');
+var fileSize = sourceMap.get('fileSize');
+var lastModified = sourceMap.get('lastModified');`},
+         {label:'File Writer (destination)',type:'js',code:`// Connector: File Writer
+// Directory: /data/output
+// File Name: patient_${'{'}DATE_YYYYMMDDHHMMSS{'}'}_${'{'}messageId{'}'}.txt
+// If File Exists: Append (or Overwrite, Roll)
+
+// In destination transformer - set output content:
+var output = '';
+output += 'PatientID: ' + msg['PID']['PID.3']['PID.3.1'].toString() + '\n';
+output += 'Name: ' + msg['PID']['PID.5']['PID.5.1'].toString() + '\n';
+return output;
+
+// SFTP Destination settings:
+// Host: sftp.partner.org, Port: 22
+// Username: mirth_user
+// Auth: Password or Private Key (PEM file path)
+// Remote Path: /incoming/hl7/`},
+       ],
+       notes:[
+         {type:'nb-a',icon:'⚠️',text:'Always configure "After Processing Action" on File Reader. Leaving files in the source directory causes them to be reprocessed on every poll interval!'},
+         {type:'nb-t',icon:'💡',text:'Use ${DATE_YYYYMMDD} and ${messageId} in File Writer filenames to ensure unique file names and easy tracing.'},
+       ],
+       tip:'For SFTP private key authentication, store the key file on the Mirth server and reference the absolute path. Ensure the Mirth service account has read permissions to the key file.'
+     }
+    },
+    // TRANSFORMERS
+    {id:'js-transformer',cat:'transform',level:'intermediate',name:'JavaScript Transformer',
+     concept:'msg, tmp, channelMap, globalMap — core transformer variables',
+     desc:'Mirth transformers use JavaScript (Rhino engine) to manipulate messages. The msg variable contains the parsed message as an E4X XML object. You read, write, and map fields using dot/bracket notation.',
+     tags:['JavaScript','transformer','msg','tmp','E4X','XML','channelMap'],
+     detail:{
+       full:'The Mirth transformer uses Mozilla Rhino (JavaScript 1.7). Messages parsed as HL7 become E4X XML objects. You navigate segments and fields using dot notation. E4X allows treating XML like a JavaScript object.',
+       examples:[
+         {label:'Reading HL7 fields',type:'js',code:`// HL7 field access pattern:
+// msg['SEGMENT']['SEGMENT.FIELD']['SEGMENT.FIELD.COMPONENT']
+
+// Patient name (PID-5)
+var lastName  = msg['PID']['PID.5']['PID.5.1'].toString();
+var firstName = msg['PID']['PID.5']['PID.5.2'].toString();
+
+// Patient MRN (PID-3, first repetition)
+var mrn = msg['PID']['PID.3']['PID.3.1'].toString();
+
+// Message type (MSH-9)
+var msgType = msg['MSH']['MSH.9']['MSH.9.1'].toString();    // e.g. "ADT"
+var trigEvent = msg['MSH']['MSH.9']['MSH.9.2'].toString();  // e.g. "A01"
+
+// Date of birth (PID-7) - format YYYYMMDD
+var dob = msg['PID']['PID.7']['PID.7.1'].toString();
+
+// Multiple OBX segments (repeating)
+for each (var obx in msg['OBX']) {
+  var testId = obx['OBX.3']['OBX.3.1'].toString();
+  var value  = obx['OBX.5']['OBX.5.1'].toString();
+  logger.info('Test: ' + testId + ' = ' + value);
+}`},
+         {label:'Writing and mapping fields',type:'js',code:`// Create a new HL7 message from template
+var template = new XML(
+  createSegment('MSH') +
+  createSegment('PID') +
+  createSegment('PV1')
+);
+
+// Set MSH fields
+tmp['MSH']['MSH.3']['MSH.3.1'] = 'MIRTH';
+tmp['MSH']['MSH.4']['MSH.4.1'] = 'HOSPITAL';
+tmp['MSH']['MSH.9']['MSH.9.1'] = 'ADT';
+tmp['MSH']['MSH.9']['MSH.9.2'] = 'A08';
+tmp['MSH']['MSH.10'] = DateUtil.getCurrentDate('yyyyMMddHHmmss');
+
+// Copy from source message
+tmp['PID']['PID.3']['PID.3.1'] = msg['PID']['PID.3']['PID.3.1'];
+tmp['PID']['PID.5']['PID.5.1'] = msg['PID']['PID.5']['PID.5.1'];
+
+// Store in channel map for use in destinations
+channelMap.put('patientMRN', mrn);
+channelMap.put('msgType', msgType);`},
+         {label:'Useful built-in functions',type:'js',code:`// Date formatting
+var today = DateUtil.getCurrentDate('yyyyMMddHHmmss');
+var formatted = DateUtil.formatDate('MM/dd/yyyy', dob, 'yyyyMMdd');
+
+// String utilities  
+var trimmed = str.trim();
+var upper = str.toUpperCase();
+var padded = StringUtils.leftPad(value, 5, '0');
+
+// Logging (visible in Mirth dashboard)
+logger.info('Processing MRN: ' + mrn);
+logger.warn('Missing field - using default');
+logger.error('Critical failure: ' + e.message);
+
+// Generate UUID
+var uuid = UUIDGenerator.getUUID();
+
+// Check if segment exists
+if (msg['DG1'].length() > 0) {
+  // DG1 segment exists
+}`},
+       ],
+       notes:[
+         {type:'nb-a',icon:'⚠️',text:'Always call .toString() when reading HL7 field values — without it you get an E4X XML object, not a string, which causes comparison bugs.'},
+         {type:'nb-t',icon:'💡',text:'Use "for each (var seg in msg[\'OBX\'])" to iterate repeating segments. Regular "for" loops don\'t work with E4X node lists.'},
+       ],
+       tip:'When building output messages, use "tmp" to construct the output message, then return it. "msg" is the incoming message (read/write). "tmp" is the outgoing message template. Both are E4X XML objects.'
+     }
+    },
+    {id:'code-templates',cat:'transform',level:'intermediate',name:'Code Templates & Shared Resources',
+     concept:'Global reusable JavaScript functions across channels',
+     desc:'Code Templates define reusable JavaScript functions that can be called from any transformer or filter in any channel. They avoid code duplication across channels.',
+     tags:['code templates','shared functions','reusable','global','library'],
+     detail:{
+       full:'Code Templates are JavaScript function libraries stored at the server or channel group level. They are automatically available in all transformer scripts. Use them for common utilities like date formatting, validation, and lookup functions.',
+       examples:[
+         {label:'Creating a code template',type:'js',code:`// Code Template: "PatientUtils"
+// Scope: Global (available in all channels)
+
+/**
+ * Format HL7 date (YYYYMMDD) to readable format
+ * @param {string} hl7Date - Date in YYYYMMDD format
+ * @returns {string} - Formatted date MM/DD/YYYY
+ */
+function formatHL7Date(hl7Date) {
+  if (!hl7Date || hl7Date.length < 8) return '';
+  var year  = hl7Date.substring(0, 4);
+  var month = hl7Date.substring(4, 6);
+  var day   = hl7Date.substring(6, 8);
+  return month + '/' + day + '/' + year;
+}
+
+/**
+ * Lookup patient MRN from database
+ * @param {string} mrn - Patient MRN
+ * @returns {object} - Patient record or null
+ */
+function lookupPatient(mrn) {
+  var dbConn = DatabaseConnectionFactory.createDatabaseConnection(
+    'com.mysql.cj.jdbc.Driver',
+    'jdbc:mysql://localhost/ehr', 'user', 'pass'
+  );
+  var rs = dbConn.executeCachedQuery(
+    "SELECT * FROM patients WHERE mrn = '" + mrn + "'"
+  );
+  if (rs.next()) {
+    return {
+      name: rs.getString('name'),
+      dob:  rs.getString('dob')
+    };
+  }
+  return null;
+}`},
+         {label:'Using code templates in transformer',type:'js',code:`// In any channel transformer — just call the function:
+var dob = msg['PID']['PID.7']['PID.7.1'].toString();
+var formattedDOB = formatHL7Date(dob);  // Uses code template
+
+var mrn = msg['PID']['PID.3']['PID.3.1'].toString();
+var patient = lookupPatient(mrn);       // Uses code template
+
+if (patient) {
+  channelMap.put('patientName', patient.name);
+} else {
+  logger.warn('Patient not found: ' + mrn);
+}`},
+       ],
+       notes:[
+         {type:'nb-t',icon:'💡',text:'Code Templates at "Global" scope are available everywhere. "Global Deploy" scope runs once on deploy. "Channel" scope limits to that channel only.'},
+         {type:'nb-a',icon:'⚠️',text:'Changes to Code Templates require channel redeployment to take effect. Test in a development channel before deploying to production.'},
+       ],
+       tip:'Use Code Templates for database connection strings, API endpoints, and environment-specific settings. Combine with channel properties for environment-aware configuration without code changes.'
+     }
+    },
+    // HL7 & FHIR
+    {id:'hl7-structure',cat:'hl7',level:'beginner',name:'HL7 v2 Message Structure',
+     concept:'MSH | PID | PV1 | OBR | OBX — Segments, Fields, Components',
+     desc:'HL7 v2 messages are pipe-delimited text. MSH defines the message header. Each line is a segment. Fields are separated by |, components by ^, repetitions by ~, subcomponents by &.',
+     tags:['HL7','MSH','PID','PV1','OBX','segments','fields','delimiters'],
+     detail:{
+       full:'HL7 v2 uses a simple text format. The first segment is always MSH (Message Header). Common segments: MSH (header), PID (patient), PV1 (visit), OBR (order), OBX (observation), DG1 (diagnosis), NTE (notes).',
+       examples:[
+         {label:'Sample ADT A01 (Admission) message',type:'hl7',code:`MSH|^~\\&|EPIC|HOSPITAL|MIRTH|LAB|20240115143022||ADT^A01|MSG001|P|2.5.1
+EVN|A01|20240115143022|||USER001
+PID|1||MRN12345^^^HOSPITAL^MR||SMITH^JOHN^A||19800315|M|||123 MAIN ST^^BOSTON^MA^02101||(617)555-1234|||M||ACC001|||
+PV1|1|I|3N^301^A^HOSPITAL||||DR456^JONES^MARY^^^MD|DR789^WHITE^BOB^^^MD||SUR||||ADM||DR456|B|||V|||||||||||||||||||HOSPITAL||||20240115143000`},
+         {label:'HL7 delimiters explained',type:'text',code:`MSH|^~\\&|...  ← MSH.1=|  MSH.2=^~\\&
+
+| = Field separator         (PID.5 = patient name)
+^ = Component separator     (PID.5.1 = last name, PID.5.2 = first)
+~ = Repetition separator    (PID.3~PID.3 = multiple MRNs)
+\\ = Escape character        (\\F\\ = literal |)
+& = Subcomponent separator  (rare, deep nesting)
+
+Field numbering:
+PID|1||MRN12345^^^HOSPITAL^MR||SMITH^JOHN^A||19800315|M
+     ^  ^                     ^
+  PID.1 PID.3 (PatientID)  PID.5 (Name)
+
+Access in Mirth:
+msg['PID']['PID.3']['PID.3.1'] = 'MRN12345'
+msg['PID']['PID.5']['PID.5.1'] = 'SMITH'
+msg['PID']['PID.5']['PID.5.2'] = 'JOHN'`},
+         {label:'Common segments reference',type:'text',code:`MSH - Message Header (always first)
+EVN - Event Type
+PID - Patient Identification
+NK1 - Next of Kin
+PV1 - Patient Visit
+PV2 - Patient Visit Additional
+ORC - Common Order
+OBR - Observation Request
+OBX - Observation/Result
+DG1 - Diagnosis
+GT1 - Guarantor
+IN1 - Insurance
+AL1 - Patient Allergy
+NTE - Notes and Comments
+MRG - Merge Patient Information`},
+       ],
+       notes:[
+         {type:'nb-t',icon:'💡',text:'HL7 v2 is NOT strict XML. Mirth parses it into E4X XML internally, but the wire format is pipe-delimited text. This is why Mirth uses a special XML representation.'},
+         {type:'nb-c',icon:'📋',text:'MSH.9 = Message Type. MSH.9.1 = Event code (ADT, ORM, ORU). MSH.9.2 = Trigger event (A01=Admit, A03=Discharge, A08=Update). MSH.10 = Message control ID (unique ID).'},
+       ],
+       tip:'Use Mirth\'s built-in Message Templates feature to build and test HL7 messages. The Channel Designer shows the parsed XML tree — click any segment to see the field breakdown.'
+     }
+    },
+    {id:'hl7-ack',cat:'hl7',level:'intermediate',name:'HL7 ACK (Acknowledgment)',
+     concept:'MSH + MSA — AA (Accept) / AE (Error) / AR (Reject)',
+     desc:'HL7 applications expect an ACK message in response. Mirth automatically generates ACKs for MLLP connections. Understanding ACK types and customizing them is critical for production interfaces.',
+     tags:['ACK','MSA','AA','AE','AR','acknowledgment','MLLP','response'],
+     detail:{
+       full:'An HL7 ACK (Acknowledgment) is a mandatory response for MLLP-based HL7 exchanges. The sending system waits for an ACK before sending the next message. Mirth auto-generates ACKs.',
+       examples:[
+         {label:'ACK message structure',type:'hl7',code:`MSH|^~\\&|MIRTH|DEST|EPIC|SRC|20240115143025||ACK^A01|ACK001|P|2.5.1
+MSA|AA|MSG001|Message accepted successfully
+
+MSA.1 codes:
+AA = Application Accept (message processed OK)
+AE = Application Error (message processed but had errors)
+AR = Application Reject (message could not be processed)`},
+         {label:'Custom ACK in Mirth response transformer',type:'js',code:`// In Source: TCP Listener → Response Transformer
+// To customize the ACK message:
+
+var ackCode = 'AA';  // or 'AE', 'AR'
+var errorMsg = '';
+
+// Check if processing had errors
+if (responseStatus == 'ERROR') {
+  ackCode = 'AE';
+  errorMsg = 'Processing failed: ' + responseError;
+}
+
+// Build custom ACK
+var ack = new XML(
+  '<ACK>' +
+  createSegment('MSH') +
+  createSegment('MSA') +
+  '</ACK>'
+);
+
+// Copy MSH and flip sender/receiver
+ack['MSH']['MSH.3'] = msg['MSH']['MSH.5'];
+ack['MSH']['MSH.4'] = msg['MSH']['MSH.6'];
+ack['MSH']['MSH.5'] = msg['MSH']['MSH.3'];
+ack['MSH']['MSH.6'] = msg['MSH']['MSH.4'];
+ack['MSH']['MSH.9']['MSH.9.1'] = 'ACK';
+ack['MSH']['MSH.10'] = UUIDGenerator.getUUID();
+
+// MSA segment
+ack['MSA']['MSA.1'] = ackCode;
+ack['MSA']['MSA.2'] = msg['MSH']['MSH.10'].toString();  // Original msg ID
+ack['MSA']['MSA.3'] = errorMsg;
+
+return ack;`},
+       ],
+       notes:[
+         {type:'nb-a',icon:'⚠️',text:'If Mirth doesn\'t send an ACK (or sends AE/AR), the sending system will typically retry the message. Ensure ACK logic is correct to prevent duplicate message processing.'},
+         {type:'nb-t',icon:'💡',text:'For MLLP connections, Mirth auto-generates a positive ACK (AA) by default when the source transformer succeeds. Customize in the Response Transformer.'},
+       ],
+       tip:'For testing ACK behavior, use tools like HAPI TestPanel, 7Edit, or simply telnet to the Mirth port. You can see the raw MLLP framing and ACK responses.'
+     }
+    },
+    {id:'fhir',cat:'hl7',level:'advanced',name:'FHIR Integration',
+     concept:'FHIR R4 Resources: Patient, Observation, Bundle, OperationOutcome',
+     desc:'FHIR (Fast Healthcare Interoperability Resources) is the modern healthcare data standard. Mirth integrates with FHIR R4 APIs via HTTP connectors, supporting RESTful CRUD operations.',
+     tags:['FHIR','R4','REST','JSON','Patient','Bundle','OperationOutcome','SMART'],
+     detail:{
+       full:'FHIR R4 uses RESTful HTTP APIs with JSON/XML payloads. Mirth can act as a FHIR server (via HTTP Listener) or client (via HTTP Sender). Common: convert HL7 v2 to FHIR, persist to FHIR repository.',
+       examples:[
+         {label:'HL7 v2 to FHIR Patient conversion',type:'js',code:`// Source: HL7 v2 ADT A01 message
+// Destination: FHIR R4 Patient resource
+
+// In destination transformer:
+var mrn = msg['PID']['PID.3']['PID.3.1'].toString();
+var lastName = msg['PID']['PID.5']['PID.5.1'].toString();
+var firstName = msg['PID']['PID.5']['PID.5.2'].toString();
+var dob = msg['PID']['PID.7']['PID.7.1'].toString();
+var gender = msg['PID']['PID.8'].toString();
+
+// Map HL7 gender to FHIR gender
+var fhirGender = {'M':'male','F':'female','O':'other','U':'unknown'}[gender] || 'unknown';
+
+// Format DOB from YYYYMMDD to YYYY-MM-DD
+var fhirDob = dob.substring(0,4)+'-'+dob.substring(4,6)+'-'+dob.substring(6,8);
+
+// Build FHIR Patient resource
+var patient = {
+  resourceType: 'Patient',
+  id: mrn,
+  identifier: [{
+    system: 'http://hospital.org/mrn',
+    value: mrn
+  }],
+  name: [{
+    family: lastName,
+    given: [firstName]
+  }],
+  birthDate: fhirDob,
+  gender: fhirGender
+};
+
+return JSON.stringify(patient, null, 2);`},
+         {label:'FHIR search response handling',type:'js',code:`// After HTTP GET /fhir/Patient?identifier=MRN123
+// Response is a FHIR Bundle
+
+// In response transformer:
+var responseBody = connectorMessage.getResponseData();
+var bundle = JSON.parse(responseBody);
+
+if (bundle.resourceType === 'Bundle' && bundle.total > 0) {
+  var patient = bundle.entry[0].resource;
+  channelMap.put('fhirPatientId', patient.id);
+  channelMap.put('fhirPatientName', patient.name[0].family);
+  logger.info('Found FHIR patient: ' + patient.id);
+} else {
+  // No patient found — handle accordingly
+  channelMap.put('fhirPatientId', null);
+  logger.warn('FHIR patient not found for MRN');
+}`},
+       ],
+       notes:[
+         {type:'nb-t',icon:'💡',text:'FHIR resources use HTTPS with JSON Content-Type: application/fhir+json. Ensure proper SSL configuration in Mirth HTTP Sender.'},
+         {type:'nb-a',icon:'⚠️',text:'FHIR servers return OperationOutcome resources on errors (4xx/5xx). Always check the response status code and handle OperationOutcome in your response transformer.'},
+       ],
+       tip:'For SMART on FHIR (OAuth2), store the client_id and client_secret in globalMap. Use a dedicated Mirth channel to fetch and refresh access tokens, storing them in globalMap for other channels to use.'
+     }
+    },
+    // ROUTING & FILTERS
+    {id:'filters',cat:'routing',level:'beginner',name:'Message Filters',
+     concept:'return true (accept) / return false (discard)',
+     desc:'Filters determine whether a message should be processed or discarded. A filter returning true accepts the message; false discards it. Filters run in the pipeline between the source transformer and destinations.',
+     tags:['filter','accept','discard','boolean','routing','conditional'],
+     detail:{
+       full:'Each destination in a channel can have its own filter. Source channels also have a filter. The filter is a JavaScript function that must return true or false. Filtered messages are shown as "Filtered" in the dashboard.',
+       examples:[
+         {label:'Common filter patterns',type:'js',code:`// Filter 1: Only process ADT A01 (Admission) messages
+var msgType = msg['MSH']['MSH.9']['MSH.9.1'].toString();
+var trigEvent = msg['MSH']['MSH.9']['MSH.9.2'].toString();
+
+return (msgType === 'ADT' && trigEvent === 'A01');
+
+// ---
+
+// Filter 2: Only adults (age >= 18)
+var dob = msg['PID']['PID.7']['PID.7.1'].toString();
+if (!dob || dob.length < 8) return false;
+var year = parseInt(dob.substring(0, 4));
+var age = new Date().getFullYear() - year;
+return age >= 18;
+
+// ---
+
+// Filter 3: Reject messages with missing MRN
+var mrn = msg['PID']['PID.3']['PID.3.1'].toString();
+if (!mrn || mrn.trim() === '') {
+  logger.warn('Rejecting message - missing MRN');
+  return false;
+}
+return true;
+
+// ---
+
+// Filter 4: Route to specific destination based on facility
+var facility = msg['MSH']['MSH.4']['MSH.4.1'].toString();
+return (facility === 'MAIN_CAMPUS' || facility === 'NORTH_CAMPUS');`},
+       ],
+       notes:[
+         {type:'nb-t',icon:'💡',text:'A "Filtered" status in the dashboard means the filter returned false — the message was intentionally discarded, not an error. This is normal behavior.'},
+         {type:'nb-c',icon:'📋',text:'Source-level filter filters before ANY destination processes. Destination-level filter filters per destination — you can send to some destinations but not others in the same channel.'},
+       ],
+       tip:'Use channelMap variables set in the Source Transformer to simplify filter logic. Compute complex values once in the transformer, then check simple boolean flags in the filter.'
+     }
+    },
+    {id:'routing',cat:'routing',level:'intermediate',name:'Channel Routing & Router Channels',
+     concept:'Channel Router → sends messages to other channels by channel ID',
+     desc:'Mirth supports routing messages from one channel to multiple target channels using the Channel Router destination or by calling channel APIs. Enables hub-and-spoke architecture.',
+     tags:['routing','Channel Router','hub-and-spoke','routeMessage','dispatch'],
+     detail:{
+       full:'The Channel Router destination type sends the current message to another channel. You can also use router.routeMessage() in scripts. This enables fan-out patterns, message splitting, and conditional routing.',
+       examples:[
+         {label:'Channel Router destination',type:'js',code:`// Destination type: Channel Router
+// Target Channel: Select from dropdown (by channel name/ID)
+
+// In destination transformer before routing:
+// Set variables the target channel will use
+channelMap.put('routingKey', 'LAB');
+channelMap.put('priority', 'STAT');
+
+// The target channel receives the same message
+// with the channelMap values available via sourceMap`},
+         {label:'Programmatic routing in transformer',type:'js',code:`// In source transformer or filter:
+// Route to different channels based on message type
+
+var msgType = msg['MSH']['MSH.9']['MSH.9.1'].toString();
+var trigEvent = msg['MSH']['MSH.9']['MSH.9.2'].toString();
+
+// Route ADT messages to ADT processing channel
+if (msgType === 'ADT') {
+  router.routeMessage('ADT_Processor', connectorMessage);
+}
+
+// Route lab results to lab channel
+if (msgType === 'ORU') {
+  router.routeMessage('Lab_Results_Channel', connectorMessage);
+}
+
+// Route orders to order management
+if (msgType === 'ORM') {
+  router.routeMessage('Order_Management', connectorMessage);
+}
+
+// Return false to stop processing in this channel
+// (message will be processed by target channels)
+return false;`},
+         {label:'Split message to multiple destinations',type:'js',code:`// Send copies to multiple channels:
+var channels = ['Lab_System', 'EMR_System', 'HIE_Gateway'];
+
+for (var i = 0; i < channels.length; i++) {
+  router.routeMessage(channels[i], connectorMessage);
+}
+
+// Each target channel gets its own copy to process independently`},
+       ],
+       notes:[
+         {type:'nb-a',icon:'⚠️',text:'router.routeMessage() sends a copy — it doesn\'t stop processing in the current channel. Return false in the filter or use "Stop Processing" to prevent double-processing.'},
+         {type:'nb-t',icon:'💡',text:'Use a "Hub" channel as an intake point that routes to spoke channels. The hub only transforms and routes — minimal logic. Spokes handle the business logic.'},
+       ],
+       tip:'For high-volume systems, use multiple destination connectors within one channel (parallel processing) rather than routing to multiple channels — fewer hops, lower latency, simpler error handling.'
+     }
+    },
+    // ERROR HANDLING
+    {id:'error-handling',cat:'errors',level:'intermediate',name:'Error Handling',
+     concept:'try/catch + ERROR status + error.message',
+     desc:'Robust error handling prevents channel crashes and data loss. Use try/catch in transformers, configure requeue settings for failures, and use alerts for critical errors.',
+     tags:['error handling','try/catch','ERROR status','requeue','retry','dead letter'],
+     detail:{
+       full:'Mirth has multiple layers of error handling: transformer exceptions, destination failures, and channel-level error handling. Proper setup ensures no messages are lost silently.',
+       examples:[
+         {label:'try/catch in transformer',type:'js',code:`// Always wrap risky operations in try/catch
+try {
+  var mrn = msg['PID']['PID.3']['PID.3.1'].toString();
+  
+  if (!mrn || mrn.trim() === '') {
+    throw new Error('Missing patient MRN in PID.3');
+  }
+  
+  var patient = lookupPatient(mrn);  // DB call that could fail
+  channelMap.put('patientData', JSON.stringify(patient));
+  
+} catch (e) {
+  // Log the error with context
+  logger.error('Transformer error - Channel: ' + channelName + 
+               ' MsgID: ' + messageId + ' Error: ' + e.message);
+  
+  // Store error info for error destination
+  channelMap.put('errorMessage', e.message);
+  channelMap.put('errorTimestamp', DateUtil.getCurrentDate('yyyyMMddHHmmss'));
+  
+  // Re-throw to mark message as ERROR (will trigger retry/alert)
+  throw e;  // or don't throw to continue processing
+}`},
+         {label:'Error destination pattern',type:'js',code:`// Add a dedicated "Error" destination to every channel
+// Connector: Database Writer or File Writer
+// Filter: return (message.getStatus().toString() === 'ERROR');
+
+// In error destination transformer:
+var errorInfo = {
+  channelId:   channelId,
+  channelName: channelName,
+  messageId:   messageId.toString(),
+  errorMsg:    connectorMessage.getProcessingError(),
+  rawMessage:  connectorMessage.getRawData(),
+  timestamp:   DateUtil.getCurrentDate('yyyy-MM-dd HH:mm:ss')
+};
+
+// Write to error log table:
+return JSON.stringify(errorInfo, null, 2);`},
+         {label:'Postprocessor error handling',type:'js',code:`// Postprocessor script runs after ALL destinations
+// Use it for cleanup and final error reporting
+
+if (message.getStatus().toString() === 'ERROR') {
+  var errorMsg = message.getProcessingError();
+  logger.error('Message failed: ' + messageId + ' - ' + errorMsg);
+  
+  // Send alert via globalMap flag
+  globalMap.put('lastError_' + channelName, errorMsg);
+  
+  // Could trigger external alert via REST call
+}`},
+       ],
+       notes:[
+         {type:'nb-r',icon:'🚨',text:'Messages that error go to "Error" status in the dashboard. You can manually reprocess them from the dashboard — but only if the underlying issue is fixed first.'},
+         {type:'nb-a',icon:'⚠️',text:'Configure "Requeue" on destination connectors for transient failures (network timeouts). Set max retries to prevent infinite loops.'},
+       ],
+       tip:'Create a global error-handling channel that all other channels route failed messages to. This centralizes error logging, alerting, and dead-letter queue management across your entire Mirth deployment.'
+     }
+    },
+    {id:'alerts',cat:'errors',level:'intermediate',name:'Alerts & Notifications',
+     concept:'Channel Alert → Email/Script triggered on ERROR or threshold',
+     desc:'Mirth Alerts notify administrators when channels encounter errors. Configure email alerts for ERROR status, channel disconnections, and custom thresholds.',
+     tags:['alerts','notifications','email','ERROR','threshold','monitoring'],
+     detail:{
+       full:'Mirth alerts fire based on triggers: channel error, channel disconnected, or custom script. Notifications can be sent via email or custom protocols. Essential for production monitoring.',
+       examples:[
+         {label:'Configuring alerts in Mirth Admin',type:'text',code:`Settings → Alerts → Add Alert
+
+Name: "Production Channel Error Alert"
+
+Trigger: Error  (fires when message status = ERROR)
+Channels: [Select specific channels or All]
+
+Action: Send Email
+  To:      oncall@hospital.org
+  Subject: [Mirth Alert] ${'{'}channelName{'}'} Error - ${'{'}messageId{'}'}
+  Body:
+  Channel: ${'{'}channelName{'}'}
+  Error:   ${'{'}error{'}'}
+  Time:    ${'{'}date{'}'}
+  Message ID: ${'{'}messageId{'}'}
+
+--- 
+
+Trigger: Statistics (threshold-based)
+Condition: Error count > 10 in last 5 minutes
+Action: Email + Script`},
+         {label:'Custom alert script',type:'js',code:`// Alert Action: Script
+// Runs when alert triggers — can call external APIs
+
+// Example: Send Slack notification
+var slackWebhook = globalMap.get('slackWebhookUrl');
+var payload = JSON.stringify({
+  text: '*Mirth Alert*: Channel *' + channelName + '* encountered an error',
+  attachments: [{
+    color: 'danger',
+    fields: [
+      {title: 'Error', value: error, short: false},
+      {title: 'Message ID', value: messageId, short: true},
+      {title: 'Time', value: new Date().toString(), short: true}
+    ]
+  }]
+});
+
+// Use HTTP connection to post to Slack
+var httpConn = new java.net.URL(slackWebhook).openConnection();
+httpConn.setRequestMethod('POST');
+httpConn.setDoOutput(true);
+httpConn.getOutputStream().write(payload.getBytes('UTF-8'));
+httpConn.getResponseCode();`},
+       ],
+       notes:[
+         {type:'nb-t',icon:'💡',text:'Configure SMTP settings in Mirth Server Settings before email alerts work. Use a dedicated monitoring email address, not personal emails.'},
+         {type:'nb-a',icon:'⚠️',text:'Alert storms (many alerts in short time) can flood email. Use threshold-based alerts (e.g., "error count > 5 in 10 minutes") instead of per-message alerts.'},
+       ],
+       tip:'Pair Mirth alerts with an external monitoring tool (PagerDuty, OpsGenie) by sending alerts to a webhook. Use the Script action to POST to the monitoring API.'
+     }
+    },
+    // ADMIN
+    {id:'global-maps',cat:'admin',level:'intermediate',name:'Global Maps & Channel Properties',
+     concept:'globalMap / globalChannelMap / configurationMap',
+     desc:'Mirth provides several shared data maps. globalMap shares data across ALL channels. globalChannelMap is per-channel but shared across messages. configurationMap stores config key-values set in admin.',
+     tags:['globalMap','globalChannelMap','configurationMap','shared data','properties'],
+     detail:{
+       full:'Maps in Mirth allow sharing state between channels and across message processing. Understanding their scope prevents data leakage and race conditions.',
+       examples:[
+         {label:'Map scopes comparison',type:'text',code:`MAP             SCOPE                    PERSISTENCE
+──────────────────────────────────────────────────────
+sourceMap      Single message, source only   Message lifetime
+channelMap     Single message, all dest       Message lifetime  
+globalChannelMap  All messages, this channel  Channel lifetime
+globalMap      All messages, ALL channels     Server lifetime
+configurationMap  Read-only config values      Deploy-time`},
+         {label:'Using maps correctly',type:'js',code:`// ── configurationMap ── (set in Mirth Admin UI, read-only in code)
+var dbUrl  = configurationMap.get('DATABASE_URL');
+var apiKey = configurationMap.get('EXTERNAL_API_KEY');
+
+// ── globalMap ── (shared across all channels)
+// Cache lookup result to avoid repeated DB calls:
+var cachedFacilities = globalMap.get('facilityLookup');
+if (!cachedFacilities) {
+  cachedFacilities = JSON.stringify(loadFacilitiesFromDB());
+  globalMap.put('facilityLookup', cachedFacilities);
+}
+var facilities = JSON.parse(cachedFacilities);
+
+// ── globalChannelMap ── (per-channel, cross-message state)
+// Track message count for this channel:
+var count = globalChannelMap.get('messageCount') || 0;
+globalChannelMap.put('messageCount', count + 1);
+
+// ── channelMap ── (set in source, read in destinations)
+channelMap.put('patientMRN', mrn);
+channelMap.put('sendingFacility', facility);
+// In destination transformer:
+var mrn = channelMap.get('patientMRN');`},
+       ],
+       notes:[
+         {type:'nb-r',icon:'🚨',text:'globalMap is NOT thread-safe. For concurrent channels writing to the same key, use Java synchronization or accept potential overwrites.'},
+         {type:'nb-t',icon:'💡',text:'Use configurationMap for environment-specific values (URLs, credentials, feature flags). Set different values per environment without touching channel code.'},
+       ],
+       tip:'Store complex objects in maps as JSON strings using JSON.stringify()/JSON.parse(). Maps only store strings — trying to store a JavaScript object directly stores its toString() representation.'
+     }
+    },
+    {id:'mirth-api',cat:'admin',level:'advanced',name:'Mirth REST API',
+     concept:'GET/POST /api/channels — programmatic channel management',
+     desc:'Mirth Connect exposes a REST API for programmatic management: deploy/undeploy channels, query message statistics, retrieve message content, and manage server configuration.',
+     tags:['REST API','API','channels','statistics','management','automation'],
+     detail:{
+       full:'The Mirth REST API allows automation of channel management, CI/CD pipeline integration, and building custom dashboards. It uses basic authentication and returns JSON responses.',
+       examples:[
+         {label:'API authentication and common endpoints',type:'js',code:`// Base URL: https://mirth-server:8443/api
+// Authentication: Basic Auth (admin:password) or session token
+
+// ── Get all channels ──
+GET /api/channels
+Authorization: Basic YWRtaW46YWRtaW4=
+
+// ── Get channel by ID ──
+GET /api/channels/{channelId}
+
+// ── Deploy channels ──
+POST /api/channels/_deploy
+Content-Type: application/xml
+Body: <set><string>{channelId}</string></set>
+
+// ── Get message statistics ──
+GET /api/channels/{channelId}/statistics
+
+// ── Get messages (with filters) ──
+GET /api/channels/{channelId}/messages?limit=50&offset=0&status=ERROR
+
+// ── Reprocess a message ──
+POST /api/channels/{channelId}/messages/{messageId}/_reprocess
+
+// ── Get channel status ──
+GET /api/channels/{channelId}/status`},
+         {label:'Python script to monitor channels',type:'js',code:`// Example automation: check for stopped channels
+// (in Python, but shows the API pattern)
+
+import requests, json
+
+base = 'https://mirth:8443/api'
+auth = ('admin', 'admin')
+headers = {'Accept': 'application/json'}
+
+# Get all channel statuses
+resp = requests.get(f'{base}/channels/statuses', 
+                    auth=auth, headers=headers, verify=False)
+statuses = resp.json()
+
+for channel in statuses:
+    if channel['state'] != 'STARTED':
+        print(f"ALERT: {channel['name']} is {channel['state']}")
+        
+        # Auto-restart stopped channel
+        requests.post(
+            f"{base}/channels/{channel['channelId']}/_start",
+            auth=auth, verify=False
+        )`},
+       ],
+       notes:[
+         {type:'nb-a',icon:'⚠️',text:'The Mirth REST API uses self-signed SSL by default. Either import the certificate or use --insecure/verify=False in development (never in production).'},
+         {type:'nb-t',icon:'💡',text:'Use API sessions (POST /api/users/_login) for long-running scripts instead of basic auth on every request — more efficient and auditable.'},
+       ],
+       tip:'Integrate Mirth REST API into your CI/CD pipeline: deploy channels automatically after testing, run smoke tests to verify channels are STARTED, and roll back by redeploying previous versions.'
+     }
+    },
+    {id:'performance',cat:'admin',level:'advanced',name:'Performance Tuning',
+     concept:'Queue threads · Batch processing · Message pruning · JVM settings',
+     desc:'Mirth performance depends on queue depth, thread count, database pruning, and JVM heap size. Properly tuned, Mirth can handle thousands of messages per second.',
+     tags:['performance','tuning','threads','queue','pruning','JVM','optimization'],
+     detail:{
+       full:'Key performance levers in Mirth: channel queue settings, JVM heap, database message pruning, batch processing, and connection pooling. Monitor with built-in statistics and Actuator endpoints.',
+       examples:[
+         {label:'Key performance settings',type:'text',code:`// 1. JVM Heap (mirth.properties or vmoptions)
+-Xms512m -Xmx2048m  ← Adjust based on available RAM
+-XX:+UseG1GC        ← G1 GC for large heaps
+
+// 2. Channel queue settings (per channel)
+Queue threads: 4-8 for high-volume channels
+Wait for previous destination: No (parallel destinations)
+Regenerate message IDs on retry: No
+
+// 3. Message Pruning (Administrator → Server Settings)
+Message pruning interval: Daily
+Default metadata storage: Error (don't store all)
+Max messages to store: 1000 per channel
+
+// 4. Database connection pool (mirth.properties)
+database.pool.maxConnections=20
+database.pool.minConnections=5
+
+// 5. Batch processing (Database Reader)
+SELECT ... LIMIT 500  ← Process 500 records at a time
+Use BULK INSERT for database writes`},
+         {label:'Performance monitoring in transformer',type:'js',code:`// Measure processing time of critical operations
+var startTime = java.lang.System.currentTimeMillis();
+
+// ... your processing logic ...
+
+var elapsed = java.lang.System.currentTimeMillis() - startTime;
+if (elapsed > 1000) {  // Warn if over 1 second
+  logger.warn('Slow processing: ' + elapsed + 'ms - MsgID: ' + messageId);
+}
+
+// Track throughput in globalChannelMap
+var msgCount = globalChannelMap.get('msgCount') || 0;
+globalChannelMap.put('msgCount', msgCount + 1);`},
+       ],
+       notes:[
+         {type:'nb-t',icon:'💡',text:'The biggest performance gain is usually database message pruning. By default, Mirth stores ALL messages — this fills up fast and slows queries. Enable pruning in production.'},
+         {type:'nb-a',icon:'⚠️',text:'Increasing queue threads speeds processing but increases database load. Monitor DB CPU and connection pool usage when tuning thread counts.'},
+       ],
+       tip:'Use Mirth\'s Channel Statistics (dashboard stats panel) to identify bottlenecks. High "Queued" count = not processing fast enough. High "Error" count = fix the root cause before tuning throughput.'
+     }
+    },
+  ]
+};
+
+// ── STATE ────────────────────────────────────────────────
+const S={cat:'all',view:'topics',search:'',learned:new Set()};
+let fcDeck=[],fcIdx=0,fcFlipped=false;
+let quizBank=[],quizIdx=0,quizScore=0,quizWrong=0,quizTotal=0;
+
+// ── INIT ─────────────────────────────────────────────────
+function init(){
+  renderCats();renderProg();renderContent();
+  animCount('total-topics',DB.topics.length);
+  document.getElementById('foot-year').textContent=new Date().getFullYear();
+}
+function animCount(id,target){
+  let v=0;const el=document.getElementById(id);
+  const t=setInterval(()=>{v=Math.min(v+Math.ceil(target/20),target);el.textContent=v;if(v>=target)clearInterval(t);},50);
+}
+function renderCats(){
+  const el=document.getElementById('cat-list');
+  let h=`<div class="cat-item ${S.cat==='all'?'active':''}" onclick="setCat('all')">
+    <div class="cl"><div class="cat-icon" style="background:rgba(45,212,191,.09)">🏥</div><span>All Topics</span></div>
+    <span class="cbadge">${DB.topics.length}</span></div>`;
+  DB.categories.forEach(c=>{
+    const n=DB.topics.filter(t=>t.cat===c.id).length;
+    h+=`<div class="cat-item ${S.cat===c.id?'active':''}" onclick="setCat('${c.id}')">
+      <div class="cl"><div class="cat-icon" style="background:${c.color}18">${c.icon}</div><span>${c.name}</span></div>
+      <span class="cbadge">${n}</span></div>`;
+  });
+  el.innerHTML=h;
+}
+function renderProg(){
+  let h='';
+  DB.categories.forEach(c=>{
+    const total=DB.topics.filter(t=>t.cat===c.id).length;
+    const ld=[...S.learned].filter(id=>DB.topics.find(t=>t.id===id&&t.cat===c.id)).length;
+    const pct=total?Math.round(ld/total*100):0;
+    h+=`<div class="pi"><div class="ph"><span class="pn" style="font-size:.67rem">${c.name.split(' ')[0]}</span><span class="pp">${ld}/${total}</span></div>
+    <div class="pbar"><div class="pfill" style="width:${pct}%;background:${c.color}"></div></div></div>`;
+  });
+  document.getElementById('prog-wrap').innerHTML=h;
+  document.getElementById('learned-count').textContent=S.learned.size;
+}
+function getFiltered(){
+  return DB.topics.filter(t=>{
+    const cOk=S.cat==='all'||t.cat===S.cat;
+    const q=S.search;
+    const sOk=!q||t.name.toLowerCase().includes(q)||t.desc.toLowerCase().includes(q)||t.tags.some(g=>g.toLowerCase().includes(q))||(t.concept&&t.concept.toLowerCase().includes(q));
+    return cOk&&sOk;
+  });
+}
+function renderContent(){
+  const el=document.getElementById('content');
+  if(S.view==='roadmap'){renderRoadmap();return;}
+  if(S.view==='cheatsheet'){renderCheatsheet();return;}
+  if(S.view==='flashcards'){renderFlashcards();return;}
+  if(S.view==='quiz'){renderQuiz();return;}
+  if(S.view==='reference'){renderReference();return;}
+  renderTopics();
+}
+function renderTopics(){
+  const el=document.getElementById('content');
+  const ft=getFiltered();
+  if(!ft.length){el.innerHTML=`<div style="text-align:center;padding:60px;color:var(--muted2)"><div style="font-size:3rem;margin-bottom:12px">🔍</div><div>No topics found</div></div>`;return;}
+  const catName=S.cat==='all'?'All Topics':DB.categories.find(c=>c.id===S.cat)?.name||'';
+  el.innerHTML=`<div class="sec-head"><h2>🏥 <span class="hl">${catName}</span></h2><div class="cnt-badge">${ft.length} topics</div></div><div class="cards-grid" id="cgrid"></div>`;
+  const grid=document.getElementById('cgrid');
+  ft.forEach((t,i)=>{
+    const div=document.createElement('div');div.className='card';
+    div.style.animation=`fadeIn .3s ${i*.04}s ease both`;
+    const cat=DB.categories.find(c=>c.id===t.cat);
+    const isL=S.learned.has(t.id);
+    div.innerHTML=`${isL?'<div class="learned-mark">✓</div>':''}
+      <div class="card-head">
+        <div class="card-title"><div class="c-icon" style="background:${cat?.color||'#2dd4bf'}18">${cat?.icon||'🏥'}</div><span>${t.name}</span></div>
+        <span class="lvl-badge lv-${t.level}">${t.level}</span>
+      </div>
+      <div class="card-body">
+        <p>${t.desc.substring(0,120)}...</p>
+        <code class="concept-pill">${t.concept}</code>
+        <div class="ctags">${t.tags.map(g=>`<span class="ctag">${g}</span>`).join('')}</div>
+      </div>`;
+    div.onclick=()=>openModal(t);
+    grid.appendChild(div);
+  });
+}
+
+// ── SYNTAX HIGHLIGHTER (fixed token-save approach) ────────
+function escHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function highlight(code,type){
+  type=type||'js';
+  // HL7 highlighting — just color segments
+  if(type==='hl7'){
+    var r=escHtml(code);
+    r=r.replace(/^([A-Z]{2,3})(\|)/gm,'<span class="hl7-seg">$1</span><span class="hl7-sep">$2</span>');
+    r=r.replace(/(\|)/g,'<span class="hl7-sep">|</span>');
+    r=r.replace(/(\^)/g,'<span class="hl7-sep">^</span>');
+    return r;
+  }
+  if(type==='text') return escHtml(code);
+  // JS highlighting — token-save approach
+  var r=escHtml(code);
+  var saved={};var idx=0;
+  var save=function(cls,val){var key='__T'+(idx++)+'__';saved[key]='<span class="'+cls+'">'+val+'</span>';return key;};
+  // 1. Comments
+  r=r.replace(/(\/\/[^\n]*)/g,function(m){return save('cm',m);});
+  r=r.replace(/(\/\*[\s\S]*?\*\/)/g,function(m){return save('cm',m);});
+  // 2. Strings
+  r=r.replace(/("(?:[^"\\]|\\.)*")/g,function(m){return save('str',m);});
+  r=r.replace(/('(?:[^'\\]|\\.)*')/g,function(m){return save('str',m);});
+  // 3. Mirth-specific identifiers (before keywords)
+  var mirthIds=['channelMap','globalMap','globalChannelMap','configurationMap','sourceMap','responseMap','destinationConnectorProperties','connectorMessage','message','router','logger','DateUtil','UUIDGenerator','DatabaseConnectionFactory','StringUtils'];
+  mirthIds.forEach(function(id){
+    r=r.replace(new RegExp('(?<![\\w$])'+id+'(?![\\w$])','g'),function(m){return save('prop',m);});
+  });
+  // 4. JS keywords
+  var kws=['var','let','const','function','return','if','else','for','while','do','switch','case','default','break','continue','new','this','typeof','instanceof','try','catch','finally','throw','class','extends','import','export','true','false','null','undefined'];
+  kws.forEach(function(k){
+    r=r.replace(new RegExp('(?<![\\w$])'+k+'(?![\\w$])','g'),function(m){return save('kw',m);});
+  });
+  // 5. Built-in functions/methods
+  var fns=['toString','parseInt','parseFloat','JSON','Date','Math','Object','Array','String','Number','Boolean','RegExp','Error','setTimeout','setInterval','encodeURIComponent','decodeURIComponent','put','get','info','warn','error','format','getBytes','getUUID'];
+  fns.forEach(function(f){
+    r=r.replace(new RegExp('(?<![\\w$])'+f+'(?![\\w$])','g'),function(m){return save('fn',m);});
+  });
+  // 6. Numbers
+  r=r.replace(/(?<![\w$])(\d+)(?![\w$])/g,function(m){return save('num',m);});
+  // 7. Restore
+  Object.keys(saved).forEach(function(key){r=r.split(key).join(saved[key]);});
+  return r;
+}
+
+// ── MODAL ────────────────────────────────────────────────
+function openModal(t){
+  const cat=DB.categories.find(c=>c.id===t.cat);
+  document.getElementById('modal-title').innerHTML=`${cat?.icon} ${t.name} <span class="lvl-badge lv-${t.level}" style="font-size:.58rem">${t.level}</span>`;
+  const d=t.detail;
+  let h=`<p class="big-desc">${d.full}</p>`;
+  if(d.examples&&d.examples.length){
+    h+=`<h4 class="m-t">💻 Examples</h4>`;
+    d.examples.forEach(ex=>{
+      h+=`<div class="code-block"><span class="cb-lbl">${ex.label}</span><pre>${highlight(ex.code,ex.type||'js')}</pre></div>`;
+    });
+  }
+  if(d.notes&&d.notes.length){
+    h+=`<h4 class="m-a">📝 Notes & Gotchas</h4>`;
+    d.notes.forEach(n=>{h+=`<div class="note-block ${n.type}"><span>${n.icon}</span><span>${n.text}</span></div>`;});
+  }
+  if(d.tip){h+=`<div class="note-block nb-g">💡 <div><strong>Pro Tip:</strong> ${d.tip}</div></div>`;}
+  h+=`<div class="m-actions">
+    <button class="m-btn m-btn-t" onclick="markLearned('${t.id}')" id="lb-${t.id}">${S.learned.has(t.id)?'✓ Mastered':'+ Mark as Mastered'}</button>
+    <button class="m-btn m-btn-c" onclick="copyConc('${t.concept.replace(/'/g,"\\'")}')">📋 Copy Concept</button>
+  </div>`;
+  document.getElementById('modal-body').innerHTML=h;
+  document.getElementById('modal').classList.add('open');
+}
+function copyConc(c){navigator.clipboard.writeText(c).catch(()=>{});showNotif('✓ Copied!');}
+function markLearned(id){
+  S.learned.has(id)?S.learned.delete(id):S.learned.add(id);
+  const btn=document.getElementById('lb-'+id);
+  if(btn)btn.innerHTML=S.learned.has(id)?'✓ Mastered':'+ Mark as Mastered';
+  renderProg();renderCats();if(S.view==='topics')renderTopics();
+}
+function closeModalOv(e){if(e.target.id==='modal')closeModal();}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+
+// ── ROADMAP ──────────────────────────────────────────────
+function renderRoadmap(){
+  const el=document.getElementById('content');
+  const stages=[
+    {n:'01',s:'done',t:'Mirth Connect Foundations',d:'Install Mirth, understand the admin UI, learn channel concepts, create your first channel.',
+     tags:['Installation','Admin UI','Channel basics','Deploy/Undeploy','Message Dashboard']},
+    {n:'02',s:'done',t:'TCP/MLLP — Your First HL7 Channel',d:'Create a TCP Listener source, understand MLLP framing, send HL7 messages, receive ACKs.',
+     tags:['TCP Listener','MLLP','HL7 over TCP','ACK basics','Testing with HAPI']},
+    {n:'03',s:'active',t:'HL7 v2 Message Structure',d:'Master MSH, PID, PV1, OBX, OBR segments. Parse fields and components using Mirth E4X XML.',
+     tags:['MSH','PID','PV1','OBX','E4X XML','msg variable','Field access']},
+    {n:'04',s:'locked',t:'JavaScript Transformers',d:'Transform HL7 messages using JavaScript. Map fields, use channelMap/globalMap, call code templates.',
+     tags:['JavaScript','msg variable','tmp variable','channelMap','Code Templates','DateUtil']},
+    {n:'05',s:'locked',t:'Filters & Routing',d:'Filter messages with boolean logic, route to multiple destinations, build hub-and-spoke architecture.',
+     tags:['Filters','router.routeMessage()','Channel Router','Multiple destinations','Conditional routing']},
+    {n:'06',s:'locked',t:'Database & File Connectors',d:'Read from and write to databases, process batch files, use SFTP for secure file transfer.',
+     tags:['Database Reader','Database Writer','File Reader','File Writer','SFTP','Batch processing']},
+    {n:'07',s:'locked',t:'HTTP/REST & FHIR Integration',d:'Build REST APIs with HTTP Listener, call external APIs, convert HL7 to FHIR resources.',
+     tags:['HTTP Listener','HTTP Sender','FHIR R4','JSON','REST API','OAuth2']},
+    {n:'08',s:'locked',t:'Error Handling & Alerts',d:'Implement robust error handling, configure alerts, build dead-letter queues, monitor channels.',
+     tags:['try/catch','Error status','Alerts','Email notifications','Requeue','Monitoring']},
+    {n:'09',s:'locked',t:'Administration & Performance',d:'Global maps, code templates, channel groups, API automation, performance tuning.',
+     tags:['globalMap','configurationMap','Channel Groups','Mirth REST API','JVM tuning','Pruning']},
+    {n:'10',s:'locked',t:'Production Mastery',d:'CI/CD integration, high-availability setup, disaster recovery, advanced FHIR workflows, security.',
+     tags:['CI/CD','High availability','Message pruning','Security','Advanced FHIR','Production ops']},
+  ];
+  el.innerHTML=`<div class="sec-head"><h2>🗺 Learning <span class="hl">Roadmap</span></h2><div class="cnt-badge">${stages.length} stages</div></div>
+  <div style="background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:20px;"><div id="rm"></div></div>`;
+  const rm=document.getElementById('rm');
+  stages.forEach(s=>{
+    const d=document.createElement('div');d.className='rm-item';
+    d.innerHTML=`<div class="rm-line"></div>
+    <div class="rm-num ${s.s}">${s.s==='done'?'✓':s.s==='active'?'▶':s.n}</div>
+    <div class="rm-content">
+      <h4 style="${s.s==='locked'?'color:var(--muted2)':''}">${s.t}
+        ${s.s==='done'?'<span style="color:var(--green2);font-size:.7rem"> — Complete ✓</span>':s.s==='active'?'<span style="color:var(--cyan2);font-size:.7rem"> — In Progress</span>':''}
+      </h4>
+      <p>${s.d}</p>
+      <div class="rm-tags">${s.tags.map(t=>`<span class="rm-tag">${t}</span>`).join('')}</div>
+    </div>`;
+    rm.appendChild(d);
+  });
+}
+
+// ── CHEATSHEET ───────────────────────────────────────────
+function renderCheatsheet(){
+  const el=document.getElementById('content');
+  el.innerHTML=`<div class="sec-head"><h2>📋 Mirth Connect <span class="hl">Cheatsheet</span></h2><div class="cnt-badge">Quick Reference</div></div>
+  <div class="cs-wrap">
+    <table class="cs-table">
+      <thead><tr><th>Topic</th><th>Key Concept</th><th>Description</th><th>Level</th></tr></thead>
+      <tbody>${DB.topics.map(t=>`<tr onclick="openModal(DB.topics.find(x=>x.id==='${t.id}'))" style="cursor:pointer">
+        <td style="font-weight:700;font-size:.79rem">${t.name}</td>
+        <td class="concept">${t.concept.substring(0,55)}</td>
+        <td style="font-size:.73rem;color:var(--text2)">${t.desc.substring(0,70)}...</td>
+        <td><span class="lvl-badge lv-${t.level}">${t.level}</span></td>
+      </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+// ── FLASHCARDS ───────────────────────────────────────────
+const FC={
+  all:{n:'All Cards',fn:()=>[...FC.core.fn(),...FC.hl7.fn(),...FC.transform.fn(),...FC.connectors.fn(),...FC.routing.fn(),...FC.errors.fn(),...FC.admin.fn()]},
+  core:{n:'🏥 Core Concepts',fn:()=>[
+    {q:'What is Mirth Connect?',a:'<strong>Open-source healthcare integration engine</strong> (ESB) built on Java. Receives messages from source systems, transforms them, and delivers to destinations. Supports HL7 v2, FHIR, DICOM, X12, XML, JSON, CSV.'},
+    {q:'What is a Mirth Channel?',a:'A channel is the <strong>fundamental unit of integration</strong> in Mirth. Each channel has exactly ONE source connector, one or more destination connectors, and scripts for transformation, filtering, and routing.'},
+    {q:'What are the Channel States?',a:'<strong>UNDEPLOYED</strong> → DEPLOYED → STARTED → PAUSED → STOPPED\n\nOnly STARTED channels process messages. Stopping preserves the queue. Undeploying clears the queue.'},
+    {q:'What is the Mirth message processing pipeline?',a:'<strong>Preprocessor → Source Transformer → Filter → Destination Transformer → Destination Connector → Response Transformer → Postprocessor</strong>\n\nEach stage is a JavaScript script.'},
+    {q:'What is the difference between channelMap and globalMap?',a:'<strong>channelMap</strong>: shared within ONE message\'s processing (source → all destinations). Lifetime = single message.\n<strong>globalMap</strong>: shared across ALL channels and ALL messages. Lifetime = server uptime.'},
+    {q:'What is configurationMap?',a:'<strong>Read-only</strong> key-value store set in Mirth Admin UI (Settings → Configuration Map). Use for environment-specific config (URLs, credentials) without hardcoding in channel scripts.'},
+    {q:'What is the Preprocessor used for?',a:'Runs on the <strong>raw string</strong> BEFORE HL7 parsing. Use it to fix malformed messages — e.g., wrong segment delimiters, encoding issues, BOM characters — before the transformer sees the message.'},
+    {q:'What is the Postprocessor used for?',a:'Runs AFTER all destinations complete. Use for: final cleanup, error logging, updating processed flags, sending summary notifications, or triggering dependent workflows.'},
+    {q:'What is a Code Template in Mirth?',a:'<strong>Reusable JavaScript functions</strong> stored at server or channel group level. Automatically available in all transformer scripts. Use for shared utilities: date formatting, DB lookups, validation, etc.'},
+    {q:'What is the difference between Deployed and Started?',a:'<strong>Deployed</strong>: channel is compiled and ready but NOT listening for messages.\n<strong>Started</strong>: channel is actively listening and processing messages.\n\nYou must deploy first, then start.'},
+    {q:'What does globalChannelMap do?',a:'Shared within ONE channel, but across ALL messages processing through it. Lifetime = channel deployment lifetime. Use for: message counters, channel-level caches, shared state between messages.'},
+    {q:'How do you stop processing in a Mirth channel without error?',a:'In a <strong>filter, return false</strong>. This marks the message as "Filtered" (intentional, not an error). The message is discarded and no destinations run.\n\nIn a transformer, throw an exception to mark as ERROR.'},
+    {q:'What is MLLP and why is it used?',a:'<strong>Minimal Lower Layer Protocol</strong> — adds framing to HL7 messages over TCP. Start block: 0x0B. End block: 0x1C + 0x0D. Without MLLP, TCP has no way to know where one HL7 message ends and the next begins.'},
+    {q:'What is the sourceMap in Mirth?',a:'A read-only map populated by the source connector with metadata about the incoming message: e.g., file name, remote IP, HTTP headers, HTTP method, database column values. Access with sourceMap.get("key").'},
+    {q:'What is the difference between Source Transformer and Destination Transformer?',a:'<strong>Source Transformer</strong>: runs once per message, transforms for all destinations. Sets channelMap variables.\n<strong>Destination Transformer</strong>: runs per destination, maps to that specific destination\'s format. Can access channelMap.'},
+  ]},
+  hl7:{n:'📋 HL7 & FHIR',fn:()=>[
+    {q:'What is the delimiter structure of an HL7 v2 message?',a:'<strong>| Field</strong> separator\n<strong>^ Component</strong> separator\n<strong>~ Repetition</strong> separator\n<strong>\\ Escape</strong> character\n<strong>& Subcomponent</strong> separator\n\nDefined in MSH.1 (|) and MSH.2 (^~\\&)'},
+    {q:'What does the MSH segment contain?',a:'<strong>Message Header</strong> — always the first segment.\nKey fields: MSH.3 Sending App, MSH.4 Sending Facility, MSH.9 Message Type (ADT^A01), MSH.10 Message Control ID (unique), MSH.11 Processing ID (P=Production), MSH.12 Version.'},
+    {q:'What does PID.3 contain and how do you access it?',a:'<strong>PID.3 = Patient Identifier List</strong> (MRN, SSN, etc.)\n\nAccess in Mirth:\n<span class="mono">msg[\'PID\'][\'PID.3\'][\'PID.3.1\'].toString()</span>\n\nAlways call .toString() — returns the string value, not an E4X object.'},
+    {q:'What is the ADT message type and common trigger events?',a:'<strong>ADT = Admit, Discharge, Transfer</strong>\nA01 = Admit/Visit Notification\nA02 = Transfer a Patient\nA03 = Discharge/End Visit\nA04 = Register a Patient\nA08 = Update Patient Information\nA11 = Cancel Admit/Visit Notification\nA31 = Update Person Information'},
+    {q:'What does OBX contain?',a:'<strong>OBX = Observation/Result segment</strong>\nOBX.3 = Observation Identifier (test code)\nOBX.4 = Observation Sub-ID\nOBX.5 = Observation Value (result)\nOBX.6 = Units\nOBX.7 = Reference Range\nOBX.8 = Abnormal Flags (H=High, L=Low, C=Critical)'},
+    {q:'What is the HL7 ACK message and its MSA codes?',a:'<strong>ACK = Acknowledgment message</strong> returned by receiving system.\n\nMSA.1 codes:\n<strong>AA</strong> = Application Accept (success)\n<strong>AE</strong> = Application Error (processed with error)\n<strong>AR</strong> = Application Reject (could not process)'},
+    {q:'How do you iterate repeating HL7 segments in Mirth?',a:'Use <strong>for each</strong> (E4X syntax, not regular for):\n\n<span class="mono">for each (var obx in msg[\'OBX\']) {\n  var val = obx[\'OBX.5\'][\'OBX.5.1\'].toString();\n}</span>\n\nRegular for loops don\'t work with E4X node lists.'},
+    {q:'What is FHIR and how does it differ from HL7 v2?',a:'<strong>FHIR (Fast Healthcare Interoperability Resources)</strong> is the modern standard. Uses REST APIs + JSON/XML. Resource-based (Patient, Observation, Bundle). Vs HL7 v2: pipe-delimited text, request-response over TCP/MLLP.'},
+    {q:'What is a FHIR Bundle?',a:'A <strong>FHIR Bundle</strong> is a container for multiple FHIR resources. Types: searchset (search results), transaction (atomic operations), batch (multiple operations), message (HL7-style messaging), collection (static group). bundle.entry[].resource contains each resource.'},
+    {q:'What HTTP Content-Type should FHIR APIs use?',a:'<strong>application/fhir+json</strong> for JSON (recommended)\n<strong>application/fhir+xml</strong> for XML\n\nSet both Content-Type (request body) AND Accept (expected response format) headers.'},
+    {q:'What is HL7 ORM and ORU?',a:'<strong>ORM = Order Message</strong> — used to place, cancel, or update orders (lab, radiology, pharmacy). Trigger events: O01 (new order), O02 (response).\n\n<strong>ORU = Observation Result</strong> — carries results back. Trigger: R01 (unsolicited observation).'},
+    {q:'What is the PV1 segment?',a:'<strong>PV1 = Patient Visit segment</strong>\nPV1.2 = Patient Class (I=Inpatient, O=Outpatient, E=Emergency)\nPV1.3 = Assigned Patient Location (ward^room^bed)\nPV1.7 = Attending Doctor\nPV1.17 = Admitting Doctor\nPV1.44 = Admit Date/Time'},
+    {q:'What is the MSH.9 field structure?',a:'<strong>MSH.9 = Message Type</strong>\nMSH.9.1 = Message Code (ADT, ORU, ORM, ACK)\nMSH.9.2 = Trigger Event (A01, A08, R01)\nMSH.9.3 = Message Structure (ADT_A01)\n\nAccess: msg[\'MSH\'][\'MSH.9\'][\'MSH.9.1\'].toString()'},
+    {q:'What is a FHIR OperationOutcome?',a:'<strong>OperationOutcome</strong> is FHIR\'s error response resource. Returned on 4xx/5xx HTTP errors. Contains: issue.severity (error/warning/info), issue.code (processing/not-found/invalid), issue.diagnostics (error message). Always check response status code and handle OperationOutcome.'},
+    {q:'What is the DG1 segment?',a:'<strong>DG1 = Diagnosis segment</strong>\nDG1.3 = Diagnosis Code (ICD-10)\nDG1.4 = Diagnosis Description\nDG1.6 = Diagnosis Type (A=Admitting, W=Working, F=Final)\nDG1.15 = Diagnosis Priority\n\nMultiple DG1 segments = multiple diagnoses.'},
+  ]},
+  transform:{n:'⚙️ Transformers',fn:()=>[
+    {q:'What is the "msg" variable in a Mirth transformer?',a:'<strong>msg</strong> is the incoming message as an E4X XML object (auto-parsed for HL7 channels). You read and write fields using dot/bracket notation.\n\nAlways call <strong>.toString()</strong> when reading values to get a string, not an XML node.'},
+    {q:'What is the "tmp" variable?',a:'<strong>tmp</strong> is the outgoing message template in the transformer. Build your output message in tmp, then return it. It starts as a copy of the incoming message template or can be initialized with createSegment().'},
+    {q:'How do you read a field from an HL7 message in Mirth?',a:'Pattern: <span class="mono">msg[\'SEGMENT\'][\'SEGMENT.FIELD\'][\'SEGMENT.FIELD.COMPONENT\'].toString()</span>\n\nExample: <span class="mono">msg[\'PID\'][\'PID.5\'][\'PID.5.1\'].toString()</span> → Patient last name\n\nAlways use .toString() to get a string value.'},
+    {q:'How do you write a field to an HL7 message?',a:'Direct assignment on tmp (or msg for in-place modification):\n\n<span class="mono">tmp[\'MSH\'][\'MSH.3\'][\'MSH.3.1\'] = \'MIRTH\';</span>\n<span class="mono">tmp[\'PID\'][\'PID.5\'][\'PID.5.1\'] = lastName;</span>\n\nReturn tmp at end of transformer.'},
+    {q:'What does DateUtil provide in Mirth?',a:'<strong>DateUtil</strong> is a built-in Mirth utility for date operations:\n<span class="mono">DateUtil.getCurrentDate("yyyyMMddHHmmss")</span> — current timestamp\n<span class="mono">DateUtil.formatDate("MM/dd/yyyy", date, "yyyyMMdd")</span> — reformat date\n<span class="mono">DateUtil.convertDate(...)</span> — convert between formats'},
+    {q:'How do you check if an HL7 segment exists?',a:'Use <strong>.length()</strong> on the E4X node list:\n\n<span class="mono">if (msg[\'DG1\'].length() > 0) {\n  // DG1 segment exists\n}</span>\n\nChecking directly would return an empty XML object (truthy), not false.'},
+    {q:'How do you store data for use in destination transformers?',a:'Use <strong>channelMap.put("key", value)</strong> in the source transformer.\nIn destination transformer: <span class="mono">channelMap.get("key")</span>\n\nOnly strings survive the map — use JSON.stringify() for objects.'},
+    {q:'What is globalMap used for in transformers?',a:'<strong>globalMap</strong> stores data shared across ALL channels and messages. Use for:\n• Cached lookup tables (facility codes, provider lists)\n• API tokens that need refreshing\n• Cross-channel state flags\n\nNot thread-safe — use for read-heavy, write-rarely data.'},
+    {q:'How do you log messages in a Mirth transformer?',a:'Use the built-in <strong>logger</strong> object:\n<span class="mono">logger.info("Processing MRN: " + mrn);</span>\n<span class="mono">logger.warn("Missing field, using default");</span>\n<span class="mono">logger.error("Critical error: " + e.message);</span>\n\nLogs appear in Mirth dashboard and log files.'},
+    {q:'How do you generate a UUID in a Mirth transformer?',a:'Use the built-in <strong>UUIDGenerator</strong>:\n\n<span class="mono">var uuid = UUIDGenerator.getUUID();</span>\n\nUseful for generating unique message IDs, correlation IDs, or FHIR resource IDs.'},
+    {q:'How do you use DatabaseConnectionFactory in a transformer?',a:'<span class="mono">var dbConn = DatabaseConnectionFactory.createDatabaseConnection(\n  \'com.mysql.cj.jdbc.Driver\',\n  \'jdbc:mysql://host/db\',\n  \'user\', \'pass\'\n);\nvar rs = dbConn.executeCachedQuery("SELECT ...");\nif (rs.next()) { var val = rs.getString("column"); }</span>'},
+    {q:'What is the difference between return and throw in a Mirth transformer?',a:'<strong>return value</strong>: normal exit, message continues through pipeline with returned value as the transformed message.\n<strong>throw new Error("msg")</strong>: marks message as ERROR status, triggers error handling, destination may retry or alert.'},
+    {q:'What does createSegment() do?',a:'<strong>createSegment(segmentName)</strong> creates a new empty HL7 segment XML element with the standard Mirth E4X structure. Used when building new HL7 messages from scratch:\n<span class="mono">var msg = new XML(createSegment("MSH") + createSegment("PID"));</span>'},
+    {q:'How do you handle repeating fields (repetitions) in HL7?',a:'Use array index or for each:\n<span class="mono">// First repetition of PID.3\nmsg[\'PID\'][\'PID.3\'][0][\'PID.3.1\'].toString()\n\n// All repetitions\nfor each (var id in msg[\'PID\'][\'PID.3\']) {\n  var mrn = id[\'PID.3.1\'].toString();\n}</span>'},
+    {q:'How do you parse JSON in a Mirth transformer?',a:'Use standard JavaScript <strong>JSON.parse()</strong> and <strong>JSON.stringify()</strong>:\n\n<span class="mono">// Parse JSON response\nvar data = JSON.parse(connectorMessage.getResponseData());\nvar id = data.patientId;\n\n// Build JSON\nvar payload = JSON.stringify({mrn: mrn, name: name});\nreturn payload;</span>'},
+  ]},
+  connectors:{n:'🔌 Connectors',fn:()=>[
+    {q:'What are the main connector types in Mirth?',a:'<strong>Source connectors</strong>: TCP Listener (MLLP), HTTP Listener, File Reader, Database Reader, JMS Listener, DICOM Listener, Web Service Listener.\n\n<strong>Destination connectors</strong>: TCP Sender, HTTP Sender, File Writer, Database Writer, Channel Router, JMS Sender.'},
+    {q:'What is the TCP Listener connector used for?',a:'Receives HL7 messages over TCP using <strong>MLLP framing</strong>. It listens on a specified port. Automatically sends HL7 ACK responses. Most common source connector for HL7 v2 interfaces.'},
+    {q:'What is MLLP framing?',a:'<strong>Start Block (SB)</strong>: 0x0B byte before message\n<strong>End Block (EB)</strong>: 0x1C byte after message\n<strong>Carriage Return (CR)</strong>: 0x0D after EB\n\nMirth handles MLLP framing automatically — you only see the HL7 message content.'},
+    {q:'How do you configure Keep Connection Open on TCP Sender?',a:'Set <strong>"Keep Connection Open = Yes"</strong> to maintain a persistent TCP connection between messages. Avoids reconnection overhead per message — critical for high-volume interfaces. Set appropriate timeout for idle connections.'},
+    {q:'What does the HTTP Listener connector do?',a:'Creates an <strong>embedded web server</strong> within Mirth on a specified port and context path. Accepts HTTP/HTTPS requests (GET, POST, PUT, DELETE). Used for REST APIs, FHIR servers, webhook receivers.'},
+    {q:'How do you access HTTP request metadata in a Mirth transformer?',a:'Via <strong>sourceMap</strong>:\n<span class="mono">var method = sourceMap.get("method");      // GET, POST\nvar url = sourceMap.get("requestUrl");\nvar headers = sourceMap.get("headers");\nvar params = sourceMap.get("parameters");  // query string params</span>'},
+    {q:'How do you set the HTTP response in Mirth?',a:'Via <strong>responseMap</strong> in the postprocessor or response transformer:\n<span class="mono">responseMap.put("responseStatusCode", "200");\nresponseMap.put("response", responseBody);\nresponseMap.put("responseContentType", "application/json");</span>'},
+    {q:'What is the Database Reader connector?',a:'Polls a database on a schedule using a SQL SELECT query. Creates one Mirth message per result row. Common for batch ETL interfaces. Must handle "mark as processed" logic manually — Mirth does NOT auto-mark rows.'},
+    {q:'How do you use parameterized SQL in Database Writer?',a:'Use <strong>${ expression }</strong> placeholders in the SQL template:\n<span class=\"mono\">INSERT INTO log (mrn, msg_type) VALUES (\n  ${ msg[\'PID\'][\'PID.3\'][\'PID.3.1\'].toString() },\n  ${ msg[\'MSH\'][\'MSH.9\'][\'MSH.9.1\'].toString() }\n);</span>'},
+    {q:'What does the File Reader connector do?',a:'Polls a directory on a schedule. Creates one message per file found matching the filter. Supports: file name filter, recursive search, regex matching. Must configure "After Processing Action" to avoid reprocessing.'},
+    {q:'What are the "After Processing" actions for File Reader?',a:'<strong>None</strong>: leaves file in place (DANGEROUS — reprocesses every poll)\n<strong>Move</strong>: moves to another directory\n<strong>Delete</strong>: deletes the file\n<strong>Rename</strong>: renames in place\n\nAlways configure Move or Delete in production.'},
+    {q:'What is the Channel Router destination?',a:'Sends the current message to another Mirth channel. The target channel receives the message as if it came from its own source. Used for fan-out patterns — sending one message to multiple processing channels.'},
+    {q:'What is the SFTP connector and how does it authenticate?',a:'SFTP destination sends files securely to remote servers via SSH File Transfer Protocol.\n\nAuth options:\n<strong>Username + Password</strong>: simple but less secure\n<strong>Private Key (PEM)</strong>: recommended for production. Store key file on Mirth server, reference absolute path.'},
+    {q:'How do you set custom headers on an HTTP Sender?',a:'In the destination connector settings, add headers in the Headers table. Or dynamically in transformer:\n<span class="mono">destinationConnectorProperties.setProperty("headers",\n  JSON.stringify({"Authorization": "Bearer " + token})\n);</span>'},
+  ]},
+  routing:{n:'🔀 Filters & Routing',fn:()=>[
+    {q:'What must a Mirth filter return?',a:'<strong>true</strong> to accept and process the message\n<strong>false</strong> to discard (filter) the message\n\nReturning false shows the message as "Filtered" status in the dashboard — this is intentional, not an error.'},
+    {q:'What is the difference between source filter and destination filter?',a:'<strong>Source filter</strong>: runs once after source transformer. If false, NO destinations run. Message is filtered.\n<strong>Destination filter</strong>: runs per destination. Can filter for some destinations but not others within the same channel.'},
+    {q:'How do you route messages to different channels?',a:'Use <strong>router.routeMessage(channelName, connectorMessage)</strong>:\n<span class="mono">if (msgType === "ADT") {\n  router.routeMessage("ADT_Processor", connectorMessage);\n}\nreturn false; // Stop processing in this channel</span>'},
+    {q:'What is the Channel Router destination?',a:'A destination connector type that sends the message to another Mirth channel. Simpler than router.routeMessage() in scripts. Use for permanent routing relationships. The target channel processes the message independently.'},
+    {q:'How do you filter for specific HL7 message types?',a:'<span class="mono">var msgType = msg[\'MSH\'][\'MSH.9\'][\'MSH.9.1\'].toString();\nvar trigger = msg[\'MSH\'][\'MSH.9\'][\'MSH.9.2\'].toString();\n\n// Only process ADT A01 (admissions)\nreturn (msgType === \'ADT\' && trigger === \'A01\');</span>'},
+    {q:'How do you implement conditional routing to multiple destinations?',a:'Add multiple destinations to one channel. Each has its own filter. Set the destination\'s filter to route to the right place:\n\nDest 1 filter: <span class="mono">return facility === "NORTH";</span>\nDest 2 filter: <span class="mono">return facility === "SOUTH";</span>\nDest 3 filter: <span class="mono">return true; // Always send to audit log</span>'},
+    {q:'What is the "Wait for previous destination" setting?',a:'<strong>Wait for previous destination = Yes</strong>: destinations run sequentially. Response from Dest 1 is available when Dest 2 runs.\n<strong>No (default)</strong>: destinations run in parallel — faster for high-volume channels. Responses not shared between destinations.'},
+    {q:'How do you reject a message with an error in a filter?',a:'To reject with an error (not just filter), <strong>throw an exception</strong> in the transformer instead:\n<span class="mono">if (!mrn) {\n  throw new Error("Missing MRN — cannot process");\n}</span>\n\nThis marks the message ERROR, not Filtered.'},
+    {q:'How do you split a batch HL7 file into individual messages?',a:'Use a <strong>batch-aware source connector</strong> (Batch File Reader or TCP with batch enabled). Mirth splits the batch into individual messages automatically. Alternatively, parse in preprocessor and use router.routeMessage() for each.'},
+    {q:'What is a "hub-and-spoke" architecture in Mirth?',a:'A <strong>Hub channel</strong> receives ALL messages from all sources. It routes (spokes) to specialized channels based on message type, facility, or other criteria.\n\nBenefit: centralized intake, single entry point, easier monitoring and error handling.'},
+  ]},
+  errors:{n:'🚨 Error Handling',fn:()=>[
+    {q:'What are the Mirth message status values?',a:'<strong>RECEIVED</strong>: message arrived but not yet processed\n<strong>TRANSFORMED</strong>: transformer ran successfully\n<strong>FILTERED</strong>: filter returned false (intentional discard)\n<strong>SENT</strong>: destination connector delivered successfully\n<strong>ERROR</strong>: an exception occurred\n<strong>QUEUED</strong>: waiting for a destination to be available'},
+    {q:'How do you handle errors in a Mirth transformer?',a:'Use <strong>try/catch</strong>:\n<span class="mono">try {\n  // risky operations\n  var mrn = msg[\'PID\'][\'PID.3\'][\'PID.3.1\'].toString();\n  if (!mrn) throw new Error("Missing MRN");\n} catch(e) {\n  logger.error("Error: " + e.message);\n  channelMap.put("errorMsg", e.message);\n  throw e; // re-throw to mark as ERROR\n}</span>'},
+    {q:'How do you create an error destination?',a:'Add a destination to the channel with:\n<strong>Filter</strong>: <span class="mono">return message.getStatus().toString() === "ERROR";</span>\n\nThis destination only activates for failed messages. Use it to write errors to a DB, file, or send an alert.'},
+    {q:'How do you get the processing error in a postprocessor?',a:'<span class="mono">var error = message.getProcessingError();\nif (error != null) {\n  logger.error("Failed: " + messageId + " - " + error);\n  // log to DB, send alert, etc.\n}</span>\n\nProcessingError contains the full exception message and stack trace.'},
+    {q:'What does Requeue do in Mirth?',a:'<strong>Requeue</strong> retries sending to a destination after a failure. Configure: max retry count, retry interval. Use for transient failures (network timeouts, server unavailable). WARNING: if the message itself is bad, requeuing loops indefinitely — set max retries.'},
+    {q:'How do you configure Mirth Alerts?',a:'Settings → Alerts → Add Alert. Configure:\n<strong>Trigger</strong>: Error, Disconnected, or Statistics threshold\n<strong>Channels</strong>: specific channels or all\n<strong>Action</strong>: Email notification or Script\n\nUse threshold alerts (error count > N) to avoid alert storms.'},
+    {q:'How do you manually reprocess an errored message?',a:'In Mirth Dashboard → Channel → Messages tab. Filter by ERROR status. Select message(s). Click <strong>Reprocess</strong>. The message is sent back through the pipeline from the beginning.\n\nFix the root cause before reprocessing — otherwise it will error again.'},
+    {q:'What is a dead-letter queue pattern in Mirth?',a:'A dedicated channel that collects all failed messages from other channels (via routing). Stores them persistently (DB or file). Provides a retry mechanism and audit trail. Prevents message loss when primary processing fails.'},
+    {q:'How do you prevent data loss on channel restart?',a:'Use <strong>Stop</strong> instead of Undeploy. Messages in the queue are preserved when stopped. Undeploying clears the queue.\n\nAlso: use message persistence (Mirth stores messages in its DB) and configure appropriate pruning to retain error messages.'},
+    {q:'What is the Preprocessor used for in error prevention?',a:'The Preprocessor runs on the <strong>raw string</strong> before parsing. Use it to fix malformed messages that would fail the transformer:\n• Remove BOM characters\n• Fix incorrect line endings\n• Correct wrong delimiter characters\n• Remove invalid characters'},
+  ]},
+  admin:{n:'🛠️ Administration',fn:()=>[
+    {q:'What is the Mirth REST API base URL?',a:'<strong>https://mirth-server:8443/api</strong>\n\nAuth: Basic authentication (Base64 encoded user:pass) or session token from POST /api/users/_login.\n\nKey endpoints: /api/channels, /api/channels/{id}/status, /api/channels/{id}/statistics'},
+    {q:'How do you deploy a channel via the Mirth REST API?',a:'<span class="mono">POST /api/channels/_deploy\nContent-Type: application/xml\nAuthorization: Basic ...\n\nBody: <set><string>{channelId}</string></set></span>\n\nTo deploy all channels: POST /api/channels/_deploy (empty body with deployAll=true parameter)'},
+    {q:'What is the Mirth configurationMap?',a:'A <strong>read-only</strong> key-value store configured in Mirth Admin → Settings → Configuration Map. Different values per environment (dev/test/prod) without changing channel code.\n\nAccess in scripts: <span class="mono">configurationMap.get("DATABASE_URL")</span>'},
+    {q:'How do you enable Message Pruning in Mirth?',a:'Settings → Server Settings → Message Pruning. Configure:\n<strong>Default pruning period</strong>: e.g., 7 days\n<strong>What to store</strong>: Error only, or None (fastest)\n<strong>Prune interval</strong>: daily\n\nCritical in production — without pruning, the Mirth DB fills up and performance degrades.'},
+    {q:'What are Channel Groups in Mirth?',a:'<strong>Channel Groups</strong> organize related channels into a folder/group. You can deploy, undeploy, start, or stop all channels in a group at once. Essential for managing dependent channels that must be deployed together.'},
+    {q:'How do you view message content in the Mirth dashboard?',a:'Channel → Messages tab. Filter by date, status, message ID. Click a message to see: Raw (incoming), Transformed, Encoded, Sent, Response. Use this for debugging — see exactly what each stage received and sent.'},
+    {q:'What JVM settings affect Mirth performance?',a:'In <strong>vmoptions</strong> or <strong>mirth.properties</strong>:\n<span class="mono">-Xms512m   ← Initial heap\n-Xmx2048m  ← Max heap\n-XX:+UseG1GC ← G1 garbage collector</span>\n\nIncrease Xmx if Mirth shows OutOfMemoryError. Monitor GC with JVisualVM.'},
+    {q:'How do you change the Mirth admin password?',a:'Mirth Admin UI → Settings → Users → Edit user. Or via REST API:\n<span class="mono">PUT /api/users/{userId}/password\n{"password": "newPassword"}</span>\n\nDefault credentials (admin/admin) MUST be changed in production.'},
+    {q:'How do you export and import channels?',a:'In Mirth Admin: right-click channel → Export Channel (saves as .xml file). Import: File → Import Channel (select .xml file).\n\nFor backup/restore: export all channels to XML. Store in version control. Import to recreate environment.'},
+    {q:'What does the Mirth Server Log show?',a:'Logs from all channel scripts (logger.info/warn/error), system events, connection failures, startup errors. Located at: <strong>$MIRTH_HOME/logs/mirth.log</strong>\n\nConfigure log level per channel or globally in log4j.properties.'},
+  ]}
+};
+
+function renderFlashcards(){
+  const el=document.getElementById('content');
+  fcDeck=FC.all.fn();fcIdx=0;fcFlipped=false;
+  el.innerHTML=`<div class="sec-head"><h2>🃏 Mirth Connect <span class="hl">Flashcards</span></h2><div class="cnt-badge" id="fc-cnt">Card 1 of ${fcDeck.length}</div></div>
+  <div class="fc-deck-sel">${Object.entries(FC).map(([k,v])=>`<div class="fc-deck-btn ${k==='all'?'active':''}" onclick="switchDeck('${k}',this)">${v.n}</div>`).join('')}</div>
+  <div class="fc-progress-bar"><div class="fc-progress-fill" id="fc-pfill" style="width:${1/fcDeck.length*100}%"></div></div>
+  <div class="fc-counter" id="fc-counter">Card 1 of ${fcDeck.length} · Click card to flip</div>
+  <div class="fc-wrap">
+    <div class="flashcard" id="flashcard" onclick="flipCard()">
+      <div class="fc-face fc-front">
+        <div class="fc-lbl-f">❓ MIRTH CONNECT</div>
+        <div class="fc-q" id="fc-q">${fcDeck[0].q}</div>
+        <div class="fc-hint">Click card to reveal answer</div>
+      </div>
+      <div class="fc-face fc-back">
+        <div class="fc-lbl-b">✅ ANSWER</div>
+        <div class="fc-a" id="fc-a">${fcDeck[0].a.replace(/\n/g,'<br>')}</div>
+      </div>
+    </div>
+  </div>
+  <div class="fc-controls">
+    <button class="fc-btn fc-btn-prev" onclick="fcNav(-1)">← Prev</button>
+    <button class="fc-btn fc-btn-flip" onclick="flipCard()">🔄 Flip</button>
+    <button class="fc-btn fc-btn-next" onclick="fcNav(1)">Next →</button>
+    <button class="fc-btn fc-btn-shuffle" onclick="shuffleDeck()">🔀 Shuffle</button>
+  </div>`;
+}
+function switchDeck(k,btn){document.querySelectorAll('.fc-deck-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');fcDeck=FC[k].fn();fcIdx=0;fcFlipped=false;updateCard();}
+function flipCard(){document.getElementById('flashcard').classList.toggle('flipped');fcFlipped=!fcFlipped;}
+function fcNav(d){fcIdx=(fcIdx+d+fcDeck.length)%fcDeck.length;fcFlipped=false;document.getElementById('flashcard').classList.remove('flipped');updateCard();}
+function shuffleDeck(){for(let i=fcDeck.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[fcDeck[i],fcDeck[j]]=[fcDeck[j],fcDeck[i]];}fcIdx=0;fcFlipped=false;document.getElementById('flashcard').classList.remove('flipped');updateCard();showNotif('🔀 Shuffled!');}
+function updateCard(){
+  const q=document.getElementById('fc-q'),a=document.getElementById('fc-a');
+  if(q)q.textContent=fcDeck[fcIdx].q;
+  if(a)a.innerHTML=fcDeck[fcIdx].a.replace(/\n/g,'<br>');
+  const cnt=document.getElementById('fc-counter');if(cnt)cnt.textContent=`Card ${fcIdx+1} of ${fcDeck.length} · Click card to flip`;
+  const badge=document.getElementById('fc-cnt');if(badge)badge.textContent=`Card ${fcIdx+1} of ${fcDeck.length}`;
+  const fill=document.getElementById('fc-pfill');if(fill)fill.style.width=`${(fcIdx+1)/fcDeck.length*100}%`;
+}
+
+// ── QUIZ BANK ────────────────────────────────────────────
+function buildQuizBank(){
+  const Q=[];
+  // Core & Channel Architecture
+  Q.push(
+    {t:'single',q:'What is Mirth Connect?',opts:['A hospital management system','An open-source healthcare integration engine that routes and transforms clinical messages between systems','A FHIR repository for storing patient records','A HL7 message validator tool'],a:1,r:'Mirth Connect is an open-source healthcare integration engine (ESB). It receives messages from source systems, transforms them, and delivers them to destination systems. Supports HL7 v2, FHIR, DICOM, X12, and more.'},
+    {t:'single',q:'How many source connectors can a Mirth channel have?',opts:['Unlimited','Two (primary and failover)','Exactly ONE source connector','As many as needed'],a:2,r:'Each Mirth channel has exactly ONE source connector. However, you can have multiple DESTINATION connectors in the same channel. To accept from multiple sources, create multiple channels.'},
+    {t:'single',q:'What does it mean when a Mirth channel is in "DEPLOYED" state?',opts:['It is actively processing messages','It is compiled and ready but NOT yet listening for messages','It has been uninstalled from the server','It is in error and needs restarting'],a:1,r:'DEPLOYED means the channel code has been compiled and resources allocated, but the channel is not yet started. You must also START the channel for it to listen for and process messages.'},
+    {t:'single',q:'What happens to the message queue when you UNDEPLOY a channel?',opts:['Messages are archived to disk','Messages are queued in a backup channel','The queue is CLEARED — unprocessed messages are lost','Messages are moved to globalMap'],a:2,r:'Undeploying a channel clears its message queue. Always STOP a channel (not undeploy) if you need to preserve unprocessed messages. Undeploy removes all resources and queued messages.'},
+    {t:'single',q:'What is the correct order of the Mirth message processing pipeline?',opts:['Filter → Transformer → Preprocessor → Destination → Postprocessor','Preprocessor → Source Transformer → Filter → Destination Transformer → Destination Connector → Postprocessor','Source Connector → Filter → Preprocessor → Transformer → Postprocessor','Transformer → Filter → Preprocessor → Destination → Postprocessor'],a:1,r:'The correct order is: Preprocessor (raw string) → Source Transformer → Filter → Destination Transformer → Destination Connector → Response Transformer → Postprocessor.'},
+    {t:'single',q:'What is the Preprocessor stage used for?',opts:['Transforming HL7 fields to a new format','Running on the raw message STRING before HL7 parsing — used to fix malformed messages','Sending the message to destination connectors','Filtering messages based on content'],a:1,r:'The Preprocessor runs on the raw message string BEFORE HL7 parsing. Use it to fix issues like wrong delimiters, BOM characters, or encoding problems that would cause the transformer to fail.'},
+    {t:'single',q:'What map is shared across ALL channels and ALL messages?',opts:['channelMap','sourceMap','globalChannelMap','globalMap'],a:3,r:'globalMap is shared across ALL channels and ALL messages on the Mirth server. Its lifetime is the server uptime. Use for cross-channel shared data like API tokens, facility lookup tables, and flags.'},
+    {t:'single',q:'What map is shared within a single message\'s processing (source to all destinations)?',opts:['globalMap','channelMap','globalChannelMap','sourceMap'],a:1,r:'channelMap is populated in the Source Transformer and available in ALL destination transformers for the same message. Its lifetime is one message\'s processing. Use it to pass data from source to destinations.'},
+    {t:'code',q:'What does this Mirth transformer code do?\n\nvar mrn = msg[\'PID\'][\'PID.3\'][\'PID.3.1\'].toString();\nchannelMap.put(\'patientMRN\', mrn);\nreturn false;',opts:['Reads the MRN, stores it in channelMap, and filters the message (returns false = discard)','Reads the MRN, stores it, and returns the transformed message','Reads the MRN and stores it in globalMap','This code will cause an error because return false is invalid'],a:0,r:'return false in a Source Transformer is unusual — it actually means return the value false, which would be set as the message content. HOWEVER, in a filter, return false means discard. This code reads PID.3.1, stores in channelMap, and sets message content to false — likely a bug.'},
+    {t:'single',q:'What is a Code Template in Mirth?',opts:['A pre-built HL7 message template for testing','Reusable JavaScript functions stored at server/group level and available in all channel scripts','A SQL template for database queries','An XML template for FHIR resources'],a:1,r:'Code Templates are reusable JavaScript function libraries. Set at Global scope = available in every channel. Use for shared utilities: date formatting, DB lookups, validation. Require channel redeployment when changed.'},
+    // HL7 & FHIR
+    {t:'single',q:'What is the HL7 field separator character?',opts:['^','~','|','&'],a:2,r:'| (pipe) is the field separator in HL7 v2. ^ separates components within a field. ~ separates repetitions. \\ is the escape character. & separates subcomponents. These are defined in MSH.1 and MSH.2.'},
+    {t:'single',q:'What does the MSH segment contain?',opts:['Patient demographics','Message Header: sender, receiver, message type, message ID, version','Observation results','Patient visit information'],a:1,r:'MSH (Message Header) is ALWAYS the first segment. Contains: MSH.3 Sending App, MSH.4 Sending Facility, MSH.5 Receiving App, MSH.9 Message Type (ADT^A01), MSH.10 Message Control ID, MSH.12 Version.'},
+    {t:'code',q:'What patient data does this Mirth code read?\n\nvar data = msg[\'PID\'][\'PID.5\'][\'PID.5.1\'].toString();',opts:['Patient MRN from PID.3','Patient last name from the name field PID.5','Patient date of birth from PID.7','Patient gender from PID.8'],a:1,r:'PID.5 is the Patient Name field. PID.5.1 is the last name component (family name). PID.5.2 = first name, PID.5.3 = middle name, PID.5.5 = suffix. Always call .toString() to get a string value.'},
+    {t:'single',q:'What does an HL7 ACK message MSA.1 value of "AA" mean?',opts:['Authentication Attempt','Application Accept — message was processed successfully','Application Archive — message was stored','Application Aborted — processing failed'],a:1,r:'MSA.1 codes: AA = Application Accept (processed successfully), AE = Application Error (processed with errors), AR = Application Reject (could not be processed). The sending system uses this to decide whether to retry.'},
+    {t:'single',q:'How do you iterate over repeating OBX segments in a Mirth transformer?',opts:['for (var i=0; i<msg.OBX.length; i++)','for (var obx in msg[\'OBX\'])','for each (var obx in msg[\'OBX\'])','msg[\'OBX\'].forEach(function(obx){})'],a:2,r:'Use "for each" (E4X syntax) to iterate repeating HL7 segments: for each (var obx in msg[\'OBX\']) { ... }. Regular "for" and "forEach" don\'t work with E4X node lists returned by Mirth\'s HL7 parser.'},
+    {t:'single',q:'What is FHIR?',opts:['A Mirth-specific message format for fast routing','Fast Healthcare Interoperability Resources — modern RESTful healthcare data standard using JSON/XML','An HL7 v2 extension for clinical data','A database protocol for medical records'],a:1,r:'FHIR (Fast Healthcare Interoperability Resources) is the modern healthcare data standard. Uses REST APIs with JSON or XML payloads, resource-based (Patient, Observation, Bundle). More developer-friendly than HL7 v2.'},
+    {t:'single',q:'What Content-Type header should FHIR JSON APIs use?',opts:['application/json','text/hl7','application/fhir+json','application/xml+fhir'],a:2,r:'FHIR R4 JSON uses Content-Type: application/fhir+json (not just application/json). For XML: application/fhir+xml. Set both Content-Type (request body) AND Accept (expected response) headers in HTTP Sender.'},
+    {t:'single',q:'What is MSH.9 in an HL7 message?',opts:['Message Control ID (unique identifier)','Message Type (e.g., ADT^A01, ORU^R01)','Message sending timestamp','Message version number'],a:1,r:'MSH.9 = Message Type. MSH.9.1 = Event code (ADT, ORU, ORM). MSH.9.2 = Trigger event (A01=Admit, A03=Discharge, A08=Update, R01=Result). This is what you filter on to identify the message type.'},
+    {t:'single',q:'What does ADT A01 mean in HL7?',opts:['Application Data Transfer — version 1','Admit/Visit Notification — patient was admitted','Admit Discharge Transfer — outpatient only','Acknowledge Data Transfer — acknowledgment message'],a:1,r:'ADT = Admit, Discharge, Transfer message type. A01 = Admit/Visit Notification (patient admitted). Other common events: A02=Transfer, A03=Discharge, A04=Register, A08=Update Patient Info, A11=Cancel Admit.'},
+    {t:'single',q:'Why must you always call .toString() when reading HL7 fields in Mirth?',opts:['For performance optimization','To convert from UTF-8 encoding','Without it, you get an E4X XML object, not a string — causing comparison failures and concatenation bugs','toString() is required by HL7 v2.5 specification'],a:2,r:'Mirth parses HL7 into an E4X XML object. Accessing msg[\'PID\'][\'PID.3\'][\'PID.3.1\'] returns an XML node, not a string. Without .toString(), comparisons with strings (=== "MRN123") always fail, and string concatenation gives [object Object].'},
+    // Connectors
+    {t:'single',q:'What protocol does the Mirth TCP Listener use for HL7 messages?',opts:['HTTP/1.1','SOAP over TCP','MLLP (Minimal Lower Layer Protocol)','FTP with HL7 encoding'],a:2,r:'The TCP Listener uses MLLP framing: 0x0B (start block) before the message, 0x1C (end block) + 0x0D (carriage return) after. MLLP allows TCP to delimit where one HL7 message ends and the next begins.'},
+    {t:'single',q:'What should you configure on a TCP Sender to avoid reconnection overhead on every message?',opts:['Increase buffer size to maximum','Set "Keep Connection Open = Yes" to maintain persistent TCP connection','Enable message compression','Set response timeout to 0'],a:1,r:'"Keep Connection Open = Yes" maintains a persistent TCP connection between messages. Without it, Mirth creates and tears down a TCP connection for EVERY message — major overhead for high-volume interfaces.'},
+    {t:'single',q:'What MUST you configure on a File Reader to prevent messages from being reprocessed?',opts:['Set polling interval to 0','Configure maximum file size','Set "After Processing Action" to Move or Delete','Enable file encryption'],a:2,r:'Without "After Processing Action" configured, processed files remain in the source directory and are reprocessed on EVERY poll. Set to Move (recommended — keeps archive) or Delete. This is a very common Mirth beginner mistake.'},
+    {t:'single',q:'What does the Database Reader connector do with processed records?',opts:['Automatically marks them with a "processed" flag','Deletes them from the database','Does NOTHING — you must handle "mark as processed" logic yourself','Moves them to an archive table automatically'],a:2,r:'Database Reader does NOT automatically mark records as processed. You must implement this logic yourself — typically in the postprocessor using a Database Writer destination or a status flag column. Forgetting this causes infinite reprocessing.'},
+    {t:'code',q:'What connector type and operation does this Mirth configuration describe?\n\nConnector: Database\nSQL: SELECT patient_id, mrn, name FROM pending_orders WHERE processed = 0\nPoll Interval: 30000 ms',opts:['Database Writer (destination) — inserts new records','Database Reader (source) — polls for unprocessed records every 30 seconds','HTTP Sender — queries a REST endpoint','Database Stored Procedure caller'],a:1,r:'This is a Database Reader (source connector). It polls the database every 30 seconds (30000ms), runs the SELECT query, and creates one Mirth message per row where processed=0. The application must handle marking records as processed.'},
+    {t:'single',q:'How do you access the original filename in a File Reader channel transformer?',opts:['msg[\'fileName\']','fileName variable in script scope','sourceMap.get("originalFilename")','fileInfo.getName()'],a:2,r:'File Reader metadata is available via sourceMap: sourceMap.get("originalFilename") — the file\'s name. sourceMap.get("fileSize") — size in bytes. sourceMap.get("lastModified") — modification timestamp.'},
+    {t:'single',q:'What is the Channel Router destination used for?',opts:['Routing HTTP responses back to the client','Sending the current message to another Mirth channel for processing','Routing SQL queries to different databases','Routing HL7 messages to different MLLP endpoints based on MSH.5'],a:1,r:'Channel Router is a destination connector that sends the current message to another Mirth channel. The target channel processes it as if it received it from its own source. Used for fan-out patterns and hub-and-spoke architectures.'},
+    // Transformers
+    {t:'code',q:'What does this code do?\n\nfor each (var obx in msg[\'OBX\']) {\n  logger.info(obx[\'OBX.5\'][\'OBX.5.1\'].toString());\n}',opts:['Creates a new OBX segment for each iteration','Logs the value of OBX.5 (observation value) for each OBX segment in the message','Deletes all OBX segments and logs the count','Filters messages that have OBX segments'],a:1,r:'This iterates all OBX (Observation/Result) segments using E4X "for each" syntax. For each OBX segment, it logs OBX.5.1 (the observation value). Using regular "for" would fail — E4X node lists require "for each".'},
+    {t:'code',q:'What is wrong with this code?\n\nvar mrn = msg[\'PID\'][\'PID.3\'][\'PID.3.1\'];\nif (mrn === "MRN12345") {\n  channelMap.put(\'found\', true);\n}',opts:['Nothing is wrong','PID.3.1 should be PID[3][1]','Missing .toString() — mrn is an E4X XML object, the comparison will always be false','channelMap.put requires a String, not boolean'],a:2,r:'Without .toString(), mrn is an E4X XML node object, not a string. The comparison (mrn === "MRN12345") compares an XML object to a string — always false. Always call .toString() when reading HL7 field values: msg[\'PID\'][\'PID.3\'][\'PID.3.1\'].toString()'},
+    {t:'single',q:'What does DateUtil.getCurrentDate("yyyyMMddHHmmss") return?',opts:['The current date formatted as YYYY-MM-DD HH:MM:SS','The current date formatted as yyyyMMddHHmmss (e.g., 20240115143022)','The HL7 timestamp format for MSH.7','The system epoch time in milliseconds'],a:1,r:'DateUtil.getCurrentDate(format) returns the current date/time as a string in the specified format. "yyyyMMddHHmmss" produces HL7-style timestamps like 20240115143022 — year(4)+month(2)+day(2)+hour(2)+min(2)+sec(2).'},
+    {t:'code',q:'What does this transformer code accomplish?\n\nvar uuid = UUIDGenerator.getUUID();\ntmp[\'MSH\'][\'MSH.10\'] = uuid;',opts:['Validates the existing message UUID','Generates a new UUID and sets it as the message control ID (MSH.10)','Copies the UUID from the source message to the destination message','Generates a UUID and stores it in globalMap'],a:1,r:'UUIDGenerator.getUUID() generates a unique UUID. MSH.10 is the Message Control ID — a unique identifier for each HL7 message. Setting it ensures each outgoing message has a unique ID for tracking and duplicate detection.'},
+    {t:'single',q:'What is the purpose of the "tmp" variable in a Mirth transformer?',opts:['A temporary variable for intermediate calculations','The outgoing/output message being constructed — return tmp to send it as the transformed message','A copy of the global map for temporary storage','The transformer script itself'],a:1,r:'"tmp" is the outgoing message template. Build your output message in tmp (or return it directly). "msg" is the incoming message. At the end of the transformer, return tmp (or msg if modifying in-place) to set the transformed message content.'},
+    {t:'single',q:'How do you store a JavaScript object in channelMap?',opts:['channelMap.put("key", object) works directly','Convert to JSON string first: channelMap.put("key", JSON.stringify(object))','Use channelMap.putObject("key", object)','Objects cannot be stored in channelMap'],a:1,r:'channelMap (and all Mirth maps) only store strings. To store a JavaScript object, serialize it: channelMap.put("key", JSON.stringify(obj)). To retrieve: var obj = JSON.parse(channelMap.get("key")).'},
+    // Filters & Routing
+    {t:'single',q:'What must a Mirth filter return to allow message processing to continue?',opts:['null','0','true','1'],a:2,r:'A filter MUST return true to process the message. Returning false discards the message (shown as "Filtered" status). Throwing an exception marks it as ERROR. Only exactly true (boolean) passes the message through.'},
+    {t:'code',q:'What does this filter return for an ADT A08 message?\n\nvar msgType = msg[\'MSH\'][\'MSH.9\'][\'MSH.9.1\'].toString();\nvar trigger = msg[\'MSH\'][\'MSH.9\'][\'MSH.9.2\'].toString();\nreturn (msgType === \'ADT\' && trigger === \'A01\');',opts:['true — ADT A08 is an ADT message so it passes','false — trigger is A08, not A01, so the message is filtered','Error — cannot compare HL7 message types with ===','Always returns true for any ADT message'],a:1,r:'This filter accepts ONLY ADT A01 messages (Admit). An ADT A08 (Update Patient) has trigger "A08", so the condition (trigger === "A01") is false. The entire expression returns false, and the A08 message is filtered (discarded).'},
+    {t:'single',q:'What is the difference between filtering a message at the source vs at a destination?',opts:['No difference — both work the same','Source filter: if false, NO destinations run. Destination filter: if false, that specific destination is skipped but others still run','Source filter runs after all destinations; destination filter runs before','Destination filter cannot use msg variable'],a:1,r:'Source-level filter (false): NO destinations process the message. Destination-level filter (false): only that specific destination is skipped — other destinations still run. Use destination filters for routing to different targets.'},
+    {t:'code',q:'What does this code do in a Mirth transformer?\n\nrouter.routeMessage("Lab_Results", connectorMessage);\nreturn false;',opts:['Sends message to Lab_Results channel AND continues processing in current channel','Routes to Lab_Results channel, and "return false" makes the current channel filter the message (though this is rarely the intent in a transformer)','Creates an error in both channels','Deletes the message from the queue'],a:1,r:'router.routeMessage() sends a copy to Lab_Results channel. "return false" in a transformer sets the message content to "false" (a string). To stop the current channel from processing further, you would filter in the filter script or use router and return in the filter.'},
+    {t:'single',q:'What is a "hub-and-spoke" channel architecture?',opts:['A single channel that processes all message types for all facilities','A hub channel receives all messages and routes to specialized spoke channels; spokes handle the business logic','Multiple identical channels for load balancing','A channel that sends to multiple databases simultaneously'],a:1,r:'Hub-and-spoke: the hub channel is the single intake point that routes messages to specialized spoke channels based on message type, facility, or other criteria. Spokes handle actual processing. Provides centralized intake with specialized processing.'},
+    // Error Handling
+    {t:'single',q:'What Mirth message status indicates an exception occurred during processing?',opts:['FAILED','REJECTED','ERROR','EXCEPTION'],a:2,r:'ERROR is the status when an unhandled exception occurs in a transformer, or when throw is used explicitly. FILTERED = filter returned false. SENT = success. QUEUED = waiting for destination. ERROR messages can be manually reprocessed.'},
+    {t:'code',q:'What does this filter expression do?\n\nreturn message.getStatus().toString() === "ERROR";',opts:['Filters all messages so none pass','Accepts ONLY messages that have ERROR status — used in an error-handling destination','Accepts all messages regardless of status','Changes the message status to ERROR'],a:1,r:'This filter returns true only when the message status is ERROR. Put this filter on a dedicated "Error Destination" to create an error handling destination — it activates only for failed messages, allowing you to log, alert, or store error details.'},
+    {t:'code',q:'What does this code do?\n\ntry {\n  var mrn = msg[\'PID\'][\'PID.3\'][\'PID.3.1\'].toString();\n  if (!mrn) throw new Error("Missing MRN");\n} catch(e) {\n  logger.error("Error: " + e.message);\n  throw e;\n}',opts:['Silently catches errors and continues processing','Reads MRN, throws custom error if empty, logs it, and re-throws to mark message as ERROR','Reads MRN and stores in channelMap','Returns the error message as the transformed message'],a:1,r:'try/catch pattern: reads MRN, validates it, throws custom error if empty. catch() logs the error (visible in dashboard). Re-throwing (throw e) marks the message as ERROR status, triggering retry/alert logic. Without re-throw, the message continues processing with possibly bad data.'},
+    {t:'single',q:'What does "Requeue" do in Mirth?',opts:['Moves the message to a different channel','Retries sending to a failed destination after a configured interval','Sends the message to the dead-letter queue','Restarts the channel'],a:1,r:'Requeue retries the destination connector after a failure (network timeout, server unavailable). Configure max retry count and interval. Important: if the message ITSELF is bad (data error), requeuing loops. Set max retries to prevent infinite retry storms.'},
+    {t:'single',q:'How do you get the processing error detail in a Mirth postprocessor?',opts:['error.getMessage()','connectorMessage.getError()','message.getProcessingError()','channel.getLastError()'],a:2,r:'message.getProcessingError() returns the full error message and stack trace for a failed message. Use in postprocessor for centralized error logging: if (message.getStatus().toString() === "ERROR") { var err = message.getProcessingError(); }'},
+    {t:'single',q:'What is the safest action when a Mirth channel needs maintenance?',opts:['Undeploy the channel immediately','Stop the channel — preserves the message queue and allows restart without losing messages','Delete and recreate the channel','Let it finish all queued messages then error'],a:1,r:'STOP (not undeploy) preserves the message queue. When you restart, queued messages are processed. UNDEPLOY clears the queue — messages are lost. For maintenance windows, Stop the channel, do maintenance, then Start again.'},
+    // Admin
+    {t:'single',q:'What is the Mirth configurationMap?',opts:['A JavaScript Map object for temporary storage in transformers','A read-only key-value store set in Mirth Admin UI for environment-specific configuration','The Mirth channel configuration XML file','A database table storing channel configurations'],a:1,r:'configurationMap is set in Mirth Admin → Settings → Configuration Map. Read-only in scripts: configurationMap.get("key"). Use for environment-specific values (database URLs, API endpoints, feature flags) without hardcoding in channels.'},
+    {t:'single',q:'What is the purpose of Message Pruning in Mirth?',opts:['Removes invalid HL7 characters from messages','Periodically deletes old messages from the Mirth database to prevent storage exhaustion and maintain performance','Removes duplicate messages from the queue','Compresses old messages for archival'],a:1,r:'Without pruning, Mirth stores EVERY message in its internal database forever — the DB grows until disk is full and queries become slow. Enable pruning in Settings → Server Settings to automatically delete messages older than N days. Critical for production.'},
+    {t:'single',q:'What is the Mirth REST API base URL?',opts:['http://mirth-server:8080/mirth','https://mirth-server:8443/api','http://mirth-server:6661/api','https://mirth-server:9443/rest'],a:1,r:'The Mirth REST API is at https://mirth-server:8443/api. Uses HTTPS with Basic authentication (or session token). Key endpoints: /api/channels (list), /api/channels/{id}/status, /api/channels/_deploy (deploy channels).'},
+    {t:'single',q:'What does a Channel Group do in Mirth?',opts:['Groups channels for load balancing across multiple Mirth servers','Organizes related channels into a folder and allows starting/stopping/deploying them as a unit','Creates message dependencies between channels in the group','Shares configuration between channels in the group'],a:1,r:'Channel Groups organize related channels in the Mirth dashboard. You can deploy, undeploy, start, or stop ALL channels in a group with one action. Essential for dependent channels that must be deployed together (e.g., hub + all spoke channels).'},
+    {t:'code',q:'What does this Mirth postprocessor code do?\n\nif (message.getStatus().toString() === "ERROR") {\n  var err = message.getProcessingError();\n  globalMap.put("lastError_" + channelName, err);\n}',opts:['Fixes the error and reprocesses the message','On error, stores the error message in globalMap keyed by channel name for monitoring','Sends an alert email about the error','Marks the message as filtered instead of error'],a:1,r:'Checks if the message failed (ERROR status). If so, reads the processing error detail and stores it in globalMap with a key that includes the channel name. This allows an external monitoring channel or script to read the last error per channel.'},
+    {t:'single',q:'Where are Mirth channel scripts (transformer, filter, etc.) executed?',opts:['On the client browser as JavaScript','On the Mirth server using Mozilla Rhino JavaScript engine (Java-based)','In the connecting EHR system','In a separate Node.js process'],a:1,r:'Mirth uses Mozilla Rhino, a Java-based JavaScript engine. Scripts run on the Mirth SERVER, not the client. This gives access to Java APIs (java.lang, java.net, etc.) from JavaScript. This is why some Java syntax works in Mirth transformers.'},
+    {t:'single',q:'How do you view the raw incoming message for a specific message in Mirth?',opts:['Check the server log file','Dashboard → Channel → Messages tab → Click message → Raw tab','Use Wireshark to capture the TCP traffic','Query the mirth_messages database table directly'],a:1,r:'Mirth Dashboard → select your channel → Messages tab → find the message → click it → Raw tab shows the incoming raw message. Other tabs: Transformed (after transformation), Encoded (sent to destination), Response (from destination). Invaluable for debugging.'}
+  );
+  for(let i=Q.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[Q[i],Q[j]]=[Q[j],Q[i]];}
+  return Q;
+}
+
+function renderQuiz(){
+  if(!quizBank.length){quizBank=buildQuizBank();quizIdx=0;quizScore=0;quizWrong=0;quizTotal=0;}
+  const el=document.getElementById('content');
+  const q=quizBank[quizIdx%quizBank.length];
+  const pct=quizTotal>0?Math.round(quizScore/(quizScore+quizWrong)*100):0;
+  el.innerHTML=`<div class="sec-head"><h2>🧠 Mirth Connect <span class="hl">Quiz</span></h2><div class="cnt-badge">Q${quizIdx+1} / ${quizBank.length}</div></div>
+  <div class="quiz-wrap">
+    <div class="q-score-bar"><div class="q-score-fill" style="width:${pct}%"></div></div>
+    <div class="q-stats">
+      <span class="q-stat qs-correct">✓ ${quizScore}</span>
+      <span class="q-stat qs-wrong">✗ ${quizWrong}</span>
+      <span class="q-stat qs-total">Total: ${quizTotal}</span>
+      <span class="q-stat qs-total" style="border-color:var(--cyan);color:var(--cyan2)">${quizTotal>0?pct+'% score':''}</span>
+    </div>
+    <div class="quiz-meta">
+      <span class="quiz-type-badge ${q.t==='code'?'qt-code':'qt-single'}">${q.t==='code'?'Read the Code':'Concept'}</span>
+      <span class="q-num">Q${quizIdx+1} of ${quizBank.length}</span>
+    </div>
+    ${q.t==='code'?`<div class="q-text">${q.q.split('\n')[0]}</div><div class="q-code">${escHtml(q.q.split('\n').slice(1).join('\n'))}</div>`:`<div class="q-text">${q.q}</div>`}
+    <div class="q-opts">${q.opts.map((o,i)=>`<div class="q-opt" onclick="answerQ(${i},this)" id="qo${i}">
+      <span class="q-letter">${'ABCD'[i]}</span><span>${o}</span></div>`).join('')}</div>
+    <div class="q-foot">
+      <div class="q-rationale" id="qrat">💡 ${q.r}</div>
+      <button class="q-next" id="qnext" onclick="nextQ()">Next →</button>
+    </div>
+  </div>`;
+}
+function answerQ(chosen,el){
+  const q=quizBank[quizIdx%quizBank.length];
+  document.querySelectorAll('.q-opt').forEach(o=>o.style.pointerEvents='none');
+  quizTotal++;
+  if(chosen===q.a){el.classList.add('correct');quizScore++;}
+  else{el.classList.add('wrong');document.getElementById('qo'+q.a).classList.add('correct');quizWrong++;}
+  document.getElementById('qrat').classList.add('show');
+  document.getElementById('qnext').style.display='block';
+}
+function nextQ(){quizIdx++;if(quizIdx>=quizBank.length){quizIdx=0;quizBank=buildQuizBank();}renderQuiz();}
+
+// ── REFERENCE ────────────────────────────────────────────
+function renderReference(){
+  const el=document.getElementById('content');
+  const sections=[
+    {title:'🔌 Source Connectors',rows:[
+      {cmd:'TCP Listener',type:'Source',desc:'Receives HL7 over MLLP/TCP. Listens on a port. Auto-sends HL7 ACK. Most common for HL7 v2.'},
+      {cmd:'HTTP Listener',type:'Source',desc:'Embedded HTTP server. Accepts REST/SOAP calls on configured port and path. Supports all HTTP methods.'},
+      {cmd:'File Reader',type:'Source',desc:'Polls a directory for new files. One message per file. Configure After Processing Action to avoid reprocessing.'},
+      {cmd:'Database Reader',type:'Source',desc:'Polls a DB table/view with a SELECT query. One message per row. Must handle "mark as processed" manually.'},
+      {cmd:'JMS Listener',type:'Source',desc:'Reads from JMS message queues (ActiveMQ, RabbitMQ, etc.). Good for async enterprise messaging.'},
+      {cmd:'DICOM Listener',type:'Source',desc:'Receives DICOM imaging messages. Used for radiology integrations.'},
+      {cmd:'Web Service Listener',type:'Source',desc:'Exposes a SOAP web service endpoint. Generates WSDL. Returns SOAP response.'},
+      {cmd:'JavaScript Reader',type:'Source',desc:'Custom polling logic in JavaScript. Most flexible source connector — full control over how messages are generated.'},
+    ]},
+    {title:'📤 Destination Connectors',rows:[
+      {cmd:'TCP Sender',type:'Destination',desc:'Sends HL7 over MLLP/TCP. Configure remote host and port. Use Keep Connection Open for performance.'},
+      {cmd:'HTTP Sender',type:'Destination',desc:'Makes HTTP/HTTPS requests (GET, POST, PUT, DELETE). Supports auth headers, SSL, custom content types.'},
+      {cmd:'File Writer',type:'Destination',desc:'Writes messages to files. Configure directory, filename pattern, encoding, and file conflict handling.'},
+      {cmd:'Database Writer',type:'Destination',desc:'Executes INSERT/UPDATE/DELETE using parameterized SQL templates. Uses ${expression} placeholders.'},
+      {cmd:'Channel Router',type:'Destination',desc:'Sends message to another Mirth channel. Used for fan-out and hub-and-spoke architectures.'},
+      {cmd:'SFTP Writer',type:'Destination',desc:'Transfers files to remote servers via SFTP (SSH). Supports password or private key authentication.'},
+      {cmd:'JMS Sender',type:'Destination',desc:'Sends messages to JMS queues/topics. Good for async enterprise messaging.'},
+      {cmd:'Document Writer',type:'Destination',desc:'Generates formatted output documents (PDF, Word, etc.) from message data using templates.'},
+      {cmd:'JavaScript Writer',type:'Destination',desc:'Custom send logic in JavaScript. Most flexible destination — full control over delivery mechanism.'},
+    ]},
+    {title:'📋 Key Transformer Variables',rows:[
+      {cmd:'msg',type:'Variable',desc:'Incoming message as E4X XML object. Read/write HL7 fields. Always call .toString() when reading values.'},
+      {cmd:'tmp',type:'Variable',desc:'Output message template being constructed. Return tmp at end of transformer to send it as the transformed message.'},
+      {cmd:'channelMap',type:'Variable',desc:'Shared within ONE message, source to all destinations. put(key,value)/get(key). Strings only — use JSON.stringify for objects.'},
+      {cmd:'globalMap',type:'Variable',desc:'Shared across ALL channels and messages. Server lifetime. Use for cross-channel data: API tokens, lookup caches.'},
+      {cmd:'globalChannelMap',type:'Variable',desc:'Per-channel, across all messages. Channel deployment lifetime. Use for channel-level counters, caches.'},
+      {cmd:'sourceMap',type:'Variable',desc:'Read-only metadata from source connector: fileName, remoteAddress, headers, HTTP method, etc.'},
+      {cmd:'responseMap',type:'Variable',desc:'Set HTTP response details: responseStatusCode, response, responseContentType.'},
+      {cmd:'configurationMap',type:'Variable',desc:'Read-only. Set in Admin UI. Environment-specific config values without code changes.'},
+      {cmd:'connectorMessage',type:'Variable',desc:'Access raw and encoded message data, processing errors, message ID.'},
+      {cmd:'messageId',type:'Variable',desc:'Unique ID of the current message within Mirth. Useful for logging and correlation.'},
+      {cmd:'channelId / channelName',type:'Variable',desc:'Current channel UUID and display name. Useful in error logging.'},
+    ]},
+    {title:'⚙️ Built-in Utilities',rows:[
+      {cmd:'logger.info/warn/error(msg)',type:'Utility',desc:'Log to Mirth log file and dashboard. info=debug, warn=warning, error=critical.'},
+      {cmd:'DateUtil.getCurrentDate(fmt)',type:'Utility',desc:'Current date in specified format. e.g., DateUtil.getCurrentDate("yyyyMMddHHmmss")'},
+      {cmd:'DateUtil.formatDate(outFmt,val,inFmt)',type:'Utility',desc:'Reformat a date string. e.g., DateUtil.formatDate("MM/dd/yyyy", dob, "yyyyMMdd")'},
+      {cmd:'UUIDGenerator.getUUID()',type:'Utility',desc:'Generate a unique UUID string. Use for message IDs, FHIR resource IDs, correlation IDs.'},
+      {cmd:'DatabaseConnectionFactory.create...()',type:'Utility',desc:'Create ad-hoc JDBC connection in scripts. Not pooled — use carefully and close after use.'},
+      {cmd:'router.routeMessage(name, msg)',type:'Utility',desc:'Send copy of message to another channel by channel name. Use in source transformer or filter.'},
+      {cmd:'createSegment(segName)',type:'Utility',desc:'Create empty HL7 segment XML for building new HL7 messages from scratch.'},
+      {cmd:'SerializerFactory.getHL7Serializer()',type:'Utility',desc:'Convert between HL7 text and XML representation.'},
+    ]},
+    {title:'📋 HL7 Common Segments',rows:[
+      {cmd:'MSH',type:'Always required',desc:'Message Header: sender, receiver, message type (MSH.9), control ID (MSH.10), version (MSH.12).'},
+      {cmd:'PID',type:'Patient',desc:'Patient Identification: MRN (PID.3), name (PID.5), DOB (PID.7), gender (PID.8), address (PID.11).'},
+      {cmd:'PV1',type:'Visit',desc:'Patient Visit: class (PV1.2), location (PV1.3), attending doctor (PV1.7), admit date (PV1.44).'},
+      {cmd:'EVN',type:'Event',desc:'Event Type: event code (EVN.1), recorded date (EVN.2), planned event date (EVN.3).'},
+      {cmd:'OBR',type:'Order/Result',desc:'Observation Request: order ID (OBR.2), test code (OBR.4), requested date (OBR.6), observation date (OBR.7).'},
+      {cmd:'OBX',type:'Result',desc:'Observation: test ID (OBX.3), value (OBX.5), units (OBX.6), range (OBX.7), flags (OBX.8).'},
+      {cmd:'DG1',type:'Diagnosis',desc:'Diagnosis: ICD code (DG1.3), description (DG1.4), type (DG1.6: A=Admitting, W=Working, F=Final).'},
+      {cmd:'NTE',type:'Notes',desc:'Notes and Comments: free-text notes attached to the previous segment.'},
+      {cmd:'MSA',type:'ACK',desc:'Message Acknowledgment: code (MSA.1: AA/AE/AR), original message ID (MSA.2), text (MSA.3).'},
+    ]},
+    {title:'🔧 Mirth REST API Key Endpoints',rows:[
+      {cmd:'GET /api/channels',type:'GET',desc:'List all channels with their configuration and status.'},
+      {cmd:'GET /api/channels/{id}/status',type:'GET',desc:'Get the current state of a specific channel (STARTED, STOPPED, etc.).'},
+      {cmd:'POST /api/channels/_deploy',type:'POST',desc:'Deploy one or more channels. Body: XML set of channel IDs.'},
+      {cmd:'POST /api/channels/{id}/_start',type:'POST',desc:'Start a deployed channel so it begins processing messages.'},
+      {cmd:'POST /api/channels/{id}/_stop',type:'POST',desc:'Stop a channel without undeploying — preserves the message queue.'},
+      {cmd:'DELETE /api/channels/{id}/deployed',type:'DELETE',desc:'Undeploy a channel — WARNING: clears the message queue.'},
+      {cmd:'GET /api/channels/{id}/statistics',type:'GET',desc:'Get message counts: received, sent, error, filtered, queued.'},
+      {cmd:'GET /api/channels/{id}/messages',type:'GET',desc:'List messages with filter options: status, date range, limit, offset.'},
+      {cmd:'POST /api/channels/{id}/messages/{msgId}/_reprocess',type:'POST',desc:'Reprocess a specific message through the channel pipeline again.'},
+    ]},
+  ];
+  el.innerHTML=`<div class="sec-head"><h2>📖 Mirth Connect <span class="hl">Reference</span></h2><div class="cnt-badge">Complete Guide</div></div>
+  ${sections.map(s=>`<div class="ref-section">
+    <div class="ref-sec-head">${s.title}</div>
+    <table class="ref-table">
+      <thead><tr><th>Name</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>${s.rows.map(r=>`<tr><td class="cmd">${r.cmd}</td><td class="type">${r.type}</td><td class="desc">${r.desc}</td></tr>`).join('')}</tbody>
+    </table>
+  </div>`).join('')}`;
+}
+
+// ── CONTROLS ─────────────────────────────────────────────
+function setView(v,btn){
+  S.view=v;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  if(v==='quiz')quizBank=[];
+  renderContent();
+}
+function setCat(c){S.cat=c;renderCats();if(S.view==='topics')renderContent();}
+function filterContent(){S.search=document.getElementById('search').value.toLowerCase();renderContent();}
+function showNotif(msg){const n=document.getElementById('notif');n.textContent=msg;n.classList.add('show');setTimeout(()=>n.classList.remove('show'),2200);}
+
+// ── AUTHOR PROTECTION ────────────────────────────────────
+const AUTHOR=Object.freeze({name:'Pamas'});
+function enforceAuthor(){
+  ['author-name','footer-author-name'].forEach(id=>{const el=document.getElementById(id);if(el&&el.textContent.trim()!==AUTHOR.name)el.textContent=AUTHOR.name;});
+  ['author-badge','footer-author'].forEach(id=>{const el=document.getElementById(id);if(el&&el.getAttribute('data-author')!==AUTHOR.name)el.setAttribute('data-author',AUTHOR.name);});
+}
+const authObs=new MutationObserver(()=>enforceAuthor());
+document.addEventListener('DOMContentLoaded',()=>{
+  ['author-name','footer-author-name','author-badge','footer-author'].forEach(id=>{
+    const el=document.getElementById(id);if(el)authObs.observe(el,{childList:true,subtree:true,characterData:true,attributes:true});
+  });
+});
+Object.defineProperty(window,'AUTHOR',{writable:false,configurable:false});
+init();enforceAuthor();
+</script>
+</body>
+</html>
